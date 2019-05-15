@@ -1,0 +1,2 @@
+GET    /api/definition                              @uk.gov.hmrc.customs.file.upload.controllers.FileUploadDocumentationController.definition()
+GET    /api/conf/:version/*file                     @uk.gov.hmrc.customs.file.upload.controllers.FileUploadDocumentationController.conf(version, file)

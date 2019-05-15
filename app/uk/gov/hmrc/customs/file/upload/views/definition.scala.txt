@@ -1,0 +1,33 @@
+@import play.api.libs.json.Json
+
+@(mayBeV1WhitelistedApplicationIds:  Option[Seq[String]])
+
+{
+  "scopes": [
+    {
+      "key": "write:customs-file-upload",
+      "name": "Request permission to upload file(s)",
+      "description": "Request permission to upload file(s)"
+    }
+  ],
+  "api": {
+    "name": "Document Submission API",
+    "description": "Allows traders to submit supporting documents for their declarations",
+    "context": "customs/supporting-documentation",
+    "versions": [
+      {
+        "version": "1.0",
+        "status": "BETA",
+        "endpointsEnabled": true,
+        "access": {
+            @mayBeV1WhitelistedApplicationIds.fold(""" "type": "PUBLIC" """)( ids =>
+                s"""
+                    "type": "PRIVATE",
+                    "whitelistedApplicationIds": ${Json.toJson(ids)}
+                """
+            )
+        }
+      }
+    ]
+  }
+}

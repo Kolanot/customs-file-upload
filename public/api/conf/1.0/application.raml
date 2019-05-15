@@ -1,0 +1,91 @@
+#%RAML 1.0
+---
+
+title: Document Submission API
+version: 1.0
+protocols: [ HTTPS ]
+baseUri: https://api.service.hmrc.gov.uk/
+mediaType: application/xml
+
+uses:
+  sec: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/securitySchemes.raml
+  annotations: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/annotations.raml
+  types: https://developer.service.hmrc.gov.uk/api-documentation/assets/common/modules/types.raml
+
+documentation:
+  - title: Overview
+    content: !include docs/overview.md
+  - title: Versioning
+    content: !include https://developer.service.hmrc.gov.uk/api-documentation/assets/common/docs/versioning.md
+  - title: Errors
+    content: !include https://developer.service.hmrc.gov.uk/api-documentation/assets/common/docs/errors.md
+  - title: Testing
+    content: !include docs/testing.md
+
+/customs/supporting-documentation:
+  /upload:
+      post:
+        displayName: Submit an upload initiate request
+        description: Obtain a signed URL to upload files to
+        headers:
+          Accept:
+            description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
+            type: string
+            required: true
+            example: application/vnd.hmrc.1.0+xml
+          Content-Type:
+            description: Specifies the format of the request body, which must be XML. UTF-8 is the only valid character set.
+            type: string
+            required: true
+            example: application/xml; charset=UTF-8
+          X-Badge-Identifier:
+            description: Represents the end-user who is interacting with the subscribed application. Required for CSP users. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 12.
+            type: string
+            required: false
+            example: ABC123
+          X-Eori-Identifier:
+            description: This is your EORI that will associate your application with you as a CSP. Required for CSP users. Must be numeric or upper case letters with a minimum length of 6 and a maximum length of 17.
+            type: string
+            required: false
+            example: ABC123
+        (annotations.scope): "write:customs-file-upload"
+        securedBy: [ sec.oauth_2_0: { scopes: [ "write:customs-file-upload" ] } ]
+        body:
+          application/xml:
+            type: !include schemas/fileupload/FileUploadRequest.xsd
+            example: !include examples/example_file_upload_202.xml
+        responses:
+          200:
+            body:
+              application/xml:
+                description: Successful response payload
+                type: !include schemas/fileupload/FileUploadResponse.xsd
+                example: !include schemas/fileupload/FileUploadResponseExample.xml
+          400:
+            body:
+              application/xml:
+                description: Invalid XML Payload
+                type: !include schemas/customs/error.xsd
+                example: |
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <errorResponse>
+                        <code>BAD_REQUEST</code>
+                        <message>Payload is not valid according to schema</message>
+                        <errors>
+                            <error>
+                                <code>xml_validation_error</code>
+                                <message>Error at line 13, column 13: no declaration found for element 'unknown'</message>
+                            </error>
+                        </errors>
+                    </errorResponse>
+          500:
+            body:
+              application/xml:
+                description: Internal server error
+                type: !include schemas/customs/error.xsd
+                example: |
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <errorResponse>
+                        <code>INTERNAL_SERVER_ERROR</code>
+                        <message>Internal server error</message>
+                    </errorResponse>

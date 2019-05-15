@@ -1,0 +1,95 @@
+/*
+ * Copyright 2019 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package uk.gov.hmrc.customs.file.upload.repo
+
+import com.google.inject.ImplementedBy
+import javax.inject.{Inject, Singleton}
+import play.api.libs.json.Json.toJsFieldJsValueWrapper
+import play.api.libs.json.{Format, Json}
+import play.modules.reactivemongo.ReactiveMongoComponent
+import reactivemongo.api.indexes.{Index, IndexType}
+import reactivemongo.bson.BSONObjectID
+import reactivemongo.play.json.JsObjectDocumentWriter
+import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
+import uk.gov.hmrc.customs.file.upload.model.{CallbackFields, FileReference, FileUploadMetadata, SubscriptionFieldsId}
+import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
+import uk.gov.hmrc.mongo.ReactiveRepository
+
+import scala.concurrent.{ExecutionContext, Future}
+
+@ImplementedBy(classOf[FileUploadMetadataMongoRepo])
+trait FileUploadMetadataRepo {
+
+  def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean]
+
+  def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]]
+
+  def update(csId: SubscriptionFieldsId, reference: FileReference, callbackFields: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]]
+}
+
+@Singleton
+class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMongoComponent,
+                                            errorHandler: FileUploadMetadataRepoErrorHandler,
+                                            logger: FileUploadLogger)
+                                           (implicit ec: ExecutionContext)
+  extends ReactiveRepository[FileUploadMetadata, BSONObjectID](
+    collectionName = "file-upload-metadata",
+    mongo = reactiveMongoComponent.mongoConnector.db,
+    domainFormat = FileUploadMetadata.fileUploadMetadataJF
+  ) with FileUploadMetadataRepo {
+
+  private implicit val format: Format[FileUploadMetadata] = FileUploadMetadata.fileUploadMetadataJF
+
+  override def indexes: Seq[Index] = Seq(
+    Index(
+      key = Seq("files.reference" -> IndexType.Ascending, "csId" -> IndexType.Ascending),
+      name = Some("csId-and-file-reference"),
+      unique = true
+    )
+  )
+
+  override def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
+    logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
+    lazy val errorMsg = s"File meta data not inserted for $fileUploadMetadata"
+
+    collection.insert(ordered = false).one(fileUploadMetadata).map {
+      writeResult => errorHandler.handleSaveError(writeResult, errorMsg)
+    }
+  }
+
+  override def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
+    logger.debug(s"fetching file upload metadata with file reference: $reference")
+
+    val selector = "files.reference" -> toJsFieldJsValueWrapper(reference)
+    find(selector).map (_.headOption)
+  }
+
+  def update(csId: SubscriptionFieldsId, reference: FileReference, cf: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
+    logger.debug(s"updating file upload metadata with file reference: $reference with callbackField=$cf")
+
+    val selector = Json.obj("files.reference" -> reference.toString, "csId" -> csId.toString)
+    val update = Json.obj("$set" -> Json.obj("files.$.maybeCallbackFields" -> Json.obj("name" -> cf.name, "mimeType" -> cf.mimeType, "checksum" -> cf.checksum, "uploadTimestamp" -> cf.uploadTimestamp, "outboundLocation" -> cf.outboundLocation.toString)))
+
+    findAndUpdate(selector, update, fetchNewObject = true).map(findAndModifyResult =>
+      findAndModifyResult.value match {
+        case None => None
+        case Some(jsonDoc) =>
+          val record = jsonDoc.as[FileUploadMetadata]
+          Some(record)
+      })
+  }
+}

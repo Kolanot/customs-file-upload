@@ -1,0 +1,10 @@
+->          /                             health.Routes
+->          /                             dynamicDefinition.Routes
+
+POST        /upload                       @uk.gov.hmrc.customs.file.upload.controllers.FileUploadController.post()
+
+GET         /admin/metrics                @com.kenshoo.play.metrics.MetricsController.metrics
+
+POST        /uploaded-file-upscan-notifications/clientSubscriptionId/:clientSubscriptionId     @uk.gov.hmrc.customs.file.upload.controllers.UpscanNotificationController.post(clientSubscriptionId)
+
+POST        /file-transmission-notify/clientSubscriptionId/:clientSubscriptionId     @uk.gov.hmrc.customs.file.upload.controllers.FileTransmissionNotificationController.post(clientSubscriptionId)
