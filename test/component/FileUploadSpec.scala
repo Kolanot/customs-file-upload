@@ -44,7 +44,7 @@ class FileUploadSpec extends ComponentTestSpec
   private val endpoint = "/upload"
   
   private val apiSubscriptionKeyForXClientIdV1 =
-    ApiSubscriptionKey(clientId = clientId, context = "customs%2Fsupporting-documentation", version = VersionOne)
+    ApiSubscriptionKey(clientId = clientId, context = "customs%2Fsupporting-documentation%2Fupload", version = VersionOne)
 
   override protected def beforeAll() {
     startMockServer()

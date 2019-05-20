@@ -44,7 +44,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
                                           config: FileUploadConfigService)
                                          (implicit ec: ExecutionContext) {
 
-  private val apiContextEncoded = URLEncoder.encode("customs/supporting-documentation", "UTF-8")
+  private val apiContextEncoded = URLEncoder.encode("customs/supporting-documentation/upload", "UTF-8")
 
   def send[A](implicit validatedRequest: ValidatedFileUploadPayloadRequest[A],
               hc: HeaderCarrier): Future[Either[Result, NodeSeq]] = {
