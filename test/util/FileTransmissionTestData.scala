@@ -90,7 +90,7 @@ object FileTransmissionTestData {
     """.stripMargin
 
   val FileTransmissionSuccessCustomsNotificationXml =
-      <Root>
+      <Root xmlns="hmrc:fileupload">
         <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
         <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
         <FileName>name1</FileName>
@@ -99,7 +99,7 @@ object FileTransmissionTestData {
       </Root>
 
   val FileTransmissionSuccessCustomsNotificationXmlWithoutFilename =
-    <Root>
+    <Root xmlns="hmrc:fileupload">
         <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
         <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
         <Outcome>SUCCESS</Outcome>
@@ -107,7 +107,7 @@ object FileTransmissionTestData {
       </Root>
 
   val FileTransmissionFailureCustomsNotificationXml =
-      <Root>
+      <Root xmlns="hmrc:fileupload">
         <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
         <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
         <FileName>name1</FileName>
@@ -116,7 +116,7 @@ object FileTransmissionTestData {
       </Root>
 
   val FileTransmissionFailureCustomsNotificationXmlWithoutFilename =
-    <Root>
+    <Root xmlns="hmrc:fileupload">
         <FileReference>31400000-8ce0-11bd-b23e-10b96e4ef00f</FileReference>
         <BatchId>48400000-8cf0-11bd-b23e-10b96e4ef001</BatchId>
         <Outcome>FAILURE</Outcome>

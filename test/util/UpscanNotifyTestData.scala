@@ -73,14 +73,11 @@ object UpscanNotifyTestData {
   val UpscanNotifyClientSubscriptionIdErrorJson = """{"code":"BAD_REQUEST","message":"Invalid clientSubscriptionId"}"""
 
   val UpscanNotificationFailedCustomsNotificationXml: Elem =
-    <root>
-      <reference>{FileReferenceOne.toString}</reference>
-      <fileStatus>FAILED</fileStatus>
-      <failureDetails>
-        <failureReason>QUARANTINE</failureReason>
-        <message>This file has a virus</message>
-      </failureDetails>
-    </root>
+    <Root xmlns="hmrc:fileupload">
+      <FileReference>{FileReferenceOne.toString}</FileReference>
+      <Outcome>QUARANTINE</Outcome>
+      <Details>This file has a virus</Details>
+    </Root>
 
   val FileUploadInternalErrorNotificationXml: Elem =
     <errorResponse>
