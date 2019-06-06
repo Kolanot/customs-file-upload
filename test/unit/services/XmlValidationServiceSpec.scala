@@ -26,7 +26,7 @@ import play.api.Configuration
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import uk.gov.hmrc.customs.file.upload.services.XmlValidationService
 import uk.gov.hmrc.play.test.UnitSpec
-import util.TestXMLData.{InvalidFileUploadXml, InvalidFileUploadXmlWithTwoErrors, validFileUploadXml}
+import util.TestXMLData.{InvalidFileUploadXml, InvalidFileUploadXmlWithTwoErrors, validFileUploadXml, InvalidFileUploadXmlWithIntegerError}
 
 import scala.xml.{Node, SAXException}
 
@@ -117,6 +117,18 @@ class XmlValidationServiceSpec extends UnitSpec with MockitoSugar with BeforeAnd
       wrapped2.isInstanceOf[SAXException] shouldBe true
 
       Option(wrapped2.asInstanceOf[SAXException].getException) shouldBe None
+    }
+
+    "fail the future with wrapped SAXExceptions when XML has an integer error" in {
+      val caught = intercept[SAXException] {
+        await(xmlValidationService.validate(InvalidFileUploadXmlWithIntegerError))
+      }
+      caught.getMessage shouldBe "cvc-type.3.1.3: The value '111111111111111111111111111111111111111' of element 'FileSequenceNo' is not valid."
+
+      Option(caught.getException) shouldBe 'nonEmpty
+      val wrapped1 = caught.getException
+      wrapped1.getMessage shouldBe "cvc-maxInclusive-valid: Value '111111111111111111111111111111111111111' is not facet-valid with respect to maxInclusive '2147483647' for type 'MinOneInt'."
+      wrapped1.isInstanceOf[SAXException] shouldBe true
     }
 
     "fail the future with configured number of wrapped SAXExceptions when there are multiple errors in XML" in {

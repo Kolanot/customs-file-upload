@@ -63,4 +63,17 @@ object TestXMLData {
     </Files>
   </FileUploadRequest>
 
+  val InvalidFileUploadXmlWithIntegerError: Elem = <FileUploadRequest
+  xmlns="hmrc:fileupload"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <DeclarationID>declarationId</DeclarationID>
+    <FileGroupSize>1</FileGroupSize>
+    <Files>
+      <File>
+        <FileSequenceNo>111111111111111111111111111111111111111</FileSequenceNo>
+        <DocumentType>document type 1</DocumentType>
+      </File>
+    </Files>
+  </FileUploadRequest>
+
 }
