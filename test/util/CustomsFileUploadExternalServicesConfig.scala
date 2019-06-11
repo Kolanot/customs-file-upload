@@ -18,7 +18,7 @@ package util
 
 object CustomsFileUploadExternalServicesConfig {
   val ApiSubscriptionFieldsContext = "/api-subscription-fields/field"
-  val UpscanInitiateContext = "/upscan/initiate"
+  val UpscanInitiateContext = "/upscan/v2/initiate"
   val FileTransmissionContext = "/file/transmission"
   val CustomsNotificationContext = "/customs-notification/notify"
   val CustomsNotificationAuthHeaderValue = "some-basic-auth"

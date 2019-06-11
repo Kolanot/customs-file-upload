@@ -30,9 +30,13 @@ object TestXMLData {
         <File>
           <FileSequenceNo>{fileSequenceNo1}</FileSequenceNo>
           <DocumentType>document type {fileSequenceNo1}</DocumentType>
+          <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
+          <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
         </File>
         <File>
           <FileSequenceNo>{fileSequenceNo2}</FileSequenceNo>
+          <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
+          <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
         </File>
       </Files>
     </FileUploadRequest>
@@ -46,6 +50,8 @@ object TestXMLData {
       <File>
         <FileSequenceNo>1</FileSequenceNo>
         <DocumentType>document type 1</DocumentType>
+        <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
+        <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
       </File>
     </Files>
   </FileUploadRequest>
@@ -59,6 +65,8 @@ object TestXMLData {
       <File>
         <FileSequenceNo>A</FileSequenceNo>
         <DocumentType>document type 1</DocumentType>
+        <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
+        <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
       </File>
     </Files>
   </FileUploadRequest>
@@ -72,6 +80,8 @@ object TestXMLData {
       <File>
         <FileSequenceNo>111111111111111111111111111111111111111</FileSequenceNo>
         <DocumentType>document type 1</DocumentType>
+        <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
+        <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
       </File>
     </Files>
   </FileUploadRequest>

@@ -42,7 +42,7 @@ class FileUploadConfigServiceSpec extends UnitSpec with MockitoSugar {
       |fileUpload.fileSize.maximum=100
       |microservice.services.upscan-initiate.host="upscan-initiate.url"
       |microservice.services.upscan-initiate.port=11115
-      |microservice.services.upscan-initiate.context=/upscan/initiate
+      |microservice.services.upscan-initiate.context=/upscan/v2/initiate
       |microservice.services.file-transmission.host=some-host3
       |microservice.services.file-transmission.port=1113
       |microservice.services.file-transmission.context=/file-transmission
@@ -67,7 +67,7 @@ class FileUploadConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.fileUploadConfig.customsNotificationBearerToken shouldBe "some-token"
       configService.fileUploadConfig.fileTransmissionCallbackUrl shouldBe "http://some-host3:1113/file-transmission"
       configService.fileUploadConfig.fileUploadCallbackUrl shouldBe "http://file-upload-upscan-callback.url"
-      configService.fileUploadConfig.upscanInitiateUrl shouldBe "http://upscan-initiate.url:11115/upscan/initiate"
+      configService.fileUploadConfig.upscanInitiateUrl shouldBe "http://upscan-initiate.url:11115/upscan/v2/initiate"
       configService.fileUploadConfig.upscanInitiateMaximumFileSize shouldBe 100
 
     }
