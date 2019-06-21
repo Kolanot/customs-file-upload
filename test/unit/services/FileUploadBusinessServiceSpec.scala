@@ -78,8 +78,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
                 <x-amz-meta-session-id>789</x-amz-meta-session-id>
                 <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
                 <policy>xxxxxxxx==</policy>
-                <success-action-redirect>https://success-redirect.com</success-action-redirect>
-                <error-action-redirect>https://error-redirect.com</error-action-redirect>
+                <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                <error_action_redirect>https://error-redirect.com</error_action_redirect>
               </Fields>
             </UploadRequest>
           </File>
@@ -103,8 +103,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
                 <x-amz-meta-session-id>789</x-amz-meta-session-id>
                 <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
                 <policy>xxxxxxxx==</policy>
-                <success-action-redirect>https://success-redirect.com</success-action-redirect>
-                <error-action-redirect>https://error-redirect.com</error-action-redirect>
+                <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                <error_action_redirect>https://error-redirect.com</error_action_redirect>
               </Fields>
             </UploadRequest>
           </File>
@@ -134,8 +134,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
                 <x-amz-meta-session-id>789</x-amz-meta-session-id>
                 <x-amz-meta-consuming-service>a-service-name</x-amz-meta-consuming-service>
                 <policy>xxxxxxxx==</policy>
-                <success-action-redirect>https://success-redirect.com</success-action-redirect>
-                <error-action-redirect>https://error-redirect.com</error-action-redirect>
+                <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                <error_action_redirect>https://error-redirect.com</error_action_redirect>
               </Fields>
             </UploadRequest>
           </File>
@@ -146,8 +146,8 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
               <Fields>
                 <Content-Type>   </Content-Type>
                 <acl>some-acl</acl>
-                <success-action-redirect>https://success-redirect.com</success-action-redirect>
-                <error-action-redirect>https://error-redirect.com</error-action-redirect>
+                <success_action_redirect>https://success-redirect.com</success_action_redirect>
+                <error_action_redirect>https://error-redirect.com</error_action_redirect>
               </Fields>
             </UploadRequest>
           </File>
