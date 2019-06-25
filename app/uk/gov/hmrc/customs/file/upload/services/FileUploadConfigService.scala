@@ -26,7 +26,8 @@ import uk.gov.hmrc.customs.file.upload.model.FileUploadConfig
 class FileUploadConfigService @Inject()(configValidatedNel: ConfigValidatedNelAdaptor, logger: FileUploadLogger) {
 
   private val root = configValidatedNel.root
-  private val upscanService = configValidatedNel.service("upscan-initiate")
+  private val upscanV1Service = configValidatedNel.service("upscan-initiate-v1")
+  private val upscanV2Service = configValidatedNel.service("upscan-initiate-v2")
   private val customsNotificationsService = configValidatedNel.service("customs-notification")
   private val apiSubscriptionFieldsService = configValidatedNel.service("api-subscription-fields")
   private val fileTransmissionService = configValidatedNel.service("file-transmission")
@@ -35,7 +36,8 @@ class FileUploadConfigService @Inject()(configValidatedNel: ConfigValidatedNelAd
   private val customsNotificationsServiceUrlNel = customsNotificationsService.serviceUrl
   private val apiSubscriptionFieldsServiceUrlNel = apiSubscriptionFieldsService.serviceUrl
 
-  private val upscanInitiateUrl = upscanService.serviceUrl
+  private val upscanV1InitiateUrl = upscanV1Service.serviceUrl
+  private val upscanV2InitiateUrl = upscanV2Service.serviceUrl
   private val upscanCallbackUrl = root.string("upscan-callback.url")
   private val fileUploadUpscanCallbackUrl = root.string("file-upload-upscan-callback.url")
   private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
@@ -44,8 +46,8 @@ class FileUploadConfigService @Inject()(configValidatedNel: ConfigValidatedNelAd
   private val upscanInitiateMaximumFileSize = root.int("fileUpload.fileSize.maximum")
 
   private val validatedFileUploadConfig: CustomsValidatedNel[FileUploadConfig] = (apiSubscriptionFieldsServiceUrlNel,
-    customsNotificationsServiceUrlNel, bearerTokenNel,
-    upscanInitiateUrl, upscanCallbackUrl, upscanInitiateMaximumFileSize, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
+    customsNotificationsServiceUrlNel, bearerTokenNel, upscanV1InitiateUrl, upscanV2InitiateUrl, upscanCallbackUrl,
+    upscanInitiateMaximumFileSize, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
   ) mapN FileUploadConfig
 
   private val customsConfigHolder =

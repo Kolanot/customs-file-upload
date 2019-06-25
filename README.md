@@ -8,10 +8,15 @@ Further documentation of the file upload service is located here:
 
 https://github.com/hmrc/upscan-initiate
 
+## Calling /upload
+
+A request to the /upload endpoint can contain successRedirect and errorRedirect URLs. These are non-mandatory.
+If both a success and error redirect are included then upscan v2 will be called, otherwise v1.
+
 ## Useful CURL commands for local testing
 [link to curl commands](docs/curl-commands.md)
 
-# Lookup of `fieldsId` UUID from `api-subscription-fields` service
+## Lookup of `fieldsId` UUID from `api-subscription-fields` service
 The `X-Client-ID` header, together with the application context and version are used
  to call the `api-subscription-fields` service to get the unique `fieldsId` UUID to pass on to the backend request.
 

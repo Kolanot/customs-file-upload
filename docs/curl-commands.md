@@ -29,10 +29,14 @@ curl -X POST \
     <hmrc:File>
       <hmrc:FileSequenceNo>1</hmrc:FileSequenceNo>
       <hmrc:DocumentType>"File2"</hmrc:DocumentType>
+      <SuccessRedirect>http://success.com/1</SuccessRedirect>
+      <ErrorRedirect>http://error.com/1</ErrorRedirect>
     </hmrc:File>
      <hmrc:File>
       <hmrc:FileSequenceNo>2</hmrc:FileSequenceNo>
       <hmrc:DocumentType>"File3", File4"</hmrc:DocumentType>
+      <SuccessRedirect>http://success.com/2</SuccessRedirect>
+      <ErrorRedirect>http://error.com/2</ErrorRedirect>
     </hmrc:File>
   </hmrc:Files>
 </hmrc:FileUploadRequest>'

@@ -40,9 +40,12 @@ class FileUploadConfigServiceSpec extends UnitSpec with MockitoSugar {
       |file-transmission-callback.url="http://some-host3:1113/file-transmission"
       |fileUpload.fileGroupSize.maximum=10
       |fileUpload.fileSize.maximum=100
-      |microservice.services.upscan-initiate.host="upscan-initiate.url"
-      |microservice.services.upscan-initiate.port=11115
-      |microservice.services.upscan-initiate.context=/upscan/v2/initiate
+      |microservice.services.upscan-initiate-v1.host="upscan-initiate-v1.url"
+      |microservice.services.upscan-initiate-v1.port=11115
+      |microservice.services.upscan-initiate-v1.context=/upscan/initiate
+      |microservice.services.upscan-initiate-v2.host="upscan-initiate-v2.url"
+      |microservice.services.upscan-initiate-v2.port=11115
+      |microservice.services.upscan-initiate-v2.context=/upscan/v2/initiate
       |microservice.services.file-transmission.host=some-host3
       |microservice.services.file-transmission.port=1113
       |microservice.services.file-transmission.context=/file-transmission
@@ -67,7 +70,8 @@ class FileUploadConfigServiceSpec extends UnitSpec with MockitoSugar {
       configService.fileUploadConfig.customsNotificationBearerToken shouldBe "some-token"
       configService.fileUploadConfig.fileTransmissionCallbackUrl shouldBe "http://some-host3:1113/file-transmission"
       configService.fileUploadConfig.fileUploadCallbackUrl shouldBe "http://file-upload-upscan-callback.url"
-      configService.fileUploadConfig.upscanInitiateUrl shouldBe "http://upscan-initiate.url:11115/upscan/v2/initiate"
+      configService.fileUploadConfig.upscanInitiateV1Url shouldBe "http://upscan-initiate-v1.url:11115/upscan/initiate"
+      configService.fileUploadConfig.upscanInitiateV2Url shouldBe "http://upscan-initiate-v2.url:11115/upscan/v2/initiate"
       configService.fileUploadConfig.upscanInitiateMaximumFileSize shouldBe 100
 
     }
@@ -80,8 +84,10 @@ class FileUploadConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Could not find config customs-notification.host
           |Service configuration not found for key: customs-notification.context
           |Service configuration not found for key: customs-notification.bearer-token
-          |Could not find config upscan-initiate.host
-          |Service configuration not found for key: upscan-initiate.context
+          |Could not find config upscan-initiate-v1.host
+          |Service configuration not found for key: upscan-initiate-v1.context
+          |Could not find config upscan-initiate-v2.host
+          |Service configuration not found for key: upscan-initiate-v2.context
           |Could not find config key 'upscan-callback.url'
           |Could not find config key 'fileUpload.fileSize.maximum'
           |Could not find config key 'file-upload-upscan-callback.url'

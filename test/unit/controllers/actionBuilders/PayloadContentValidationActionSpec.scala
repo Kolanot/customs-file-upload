@@ -132,8 +132,8 @@ class PayloadContentValidationActionSpec extends UnitSpec with MockitoSugar {
         FileUploadRequest(DeclarationId("declarationId"),
           FileGroupSize(2),
           Seq(
-            FileUploadFile(FileSequenceNo(1), Some(DocumentType("document type 1")), "https://success-redirect.com", "https://error-redirect.com"),
-            FileUploadFile(FileSequenceNo(2), None, "https://success-redirect.com", "https://error-redirect.com")
+            FileUploadFile(FileSequenceNo(1), Some(DocumentType("document type 1")), Some("https://success-redirect.com"), Some("https://error-redirect.com")),
+            FileUploadFile(FileSequenceNo(2), None, Some("https://success-redirect.com"), Some("https://error-redirect.com"))
           )
         )
       ))

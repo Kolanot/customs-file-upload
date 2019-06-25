@@ -51,7 +51,9 @@ object TestData {
   val clientSubscriptionIdString: String = "327d9145-4965-4d28-a2c5-39dedee50334"
 
   val TenMb = 10485760
-  val fileUploadConfig = FileUploadConfig("API_SUBSCRIPTION_FIELDS_URL", "CUSTOMS_NOTIFICATION_URL", "some-token", "UPSCAN_INITIATE_URL", "UPSCAN_URL_IGNORED", TenMb, "UPSCAN_URL_IGNORED", 3, "fileTransmissionCallbackUrl",  "fileTransmissionUrl")
+  val fileUploadConfig = FileUploadConfig("API_SUBSCRIPTION_FIELDS_URL", "CUSTOMS_NOTIFICATION_URL",
+    "some-token", "UPSCAN_INITIATE_V1_URL", "UPSCAN_INITIATE_V2_URL", "UPSCAN_URL_IGNORED",
+    TenMb, "UPSCAN_URL_IGNORED", 3, "fileTransmissionCallbackUrl",  "fileTransmissionUrl")
 
   val validBadgeIdentifierValue = "BADGEID123"
   val badgeIdentifier: BadgeIdentifier = BadgeIdentifier(validBadgeIdentifierValue)
@@ -74,13 +76,13 @@ object TestData {
     NodeSeq.Empty,
     FakeRequest().withJsonBody(Json.obj("fake" -> "request")),
     FileUploadRequest(DeclarationId("decId123"),FileGroupSize(TWO),
-    Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None, "https://success-redirect.com", "https://error-redirect.com"),
-      FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), "https://success-redirect.com", "https://error-redirect.com")))
+    Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None, Some("https://success-redirect.com"), Some("https://error-redirect.com")),
+      FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), Some("https://success-redirect.com"), Some("https://error-redirect.com"))))
   )
 
   val ValidatedFileUploadPayloadRequestForCspWithTwoFiles = ValidatedFileUploadPayloadRequest(ConversationId(UUID.randomUUID()), VersionOne, ClientId("ABC"), CspWithEori(badgeIdentifier, Eori("123")), NodeSeq.Empty, FakeRequest().withJsonBody(Json.obj("fake" -> "request")), FileUploadRequest(DeclarationId("decId123"),FileGroupSize(TWO),
-      Seq(FileUploadFile(FileSequenceNo(ONE), Some(DocumentType("docType1")), "https://success-redirect.com", "https://error-redirect.com"),
-        FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), "https://success-redirect.com", "https://error-redirect.com"))))
+      Seq(FileUploadFile(FileSequenceNo(ONE), Some(DocumentType("docType1")), Some("https://success-redirect.com"), Some("https://error-redirect.com")),
+        FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), Some("https://success-redirect.com"), Some("https://error-redirect.com")))))
 
   val ValidatedFileUploadPayloadRequestWithFourFiles = ValidatedFileUploadPayloadRequest(
     ConversationId(UUID.randomUUID()),
@@ -92,10 +94,10 @@ object TestData {
     FileUploadRequest(
       DeclarationId("decId123"),
       FileGroupSize(FOUR),
-      Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None, "https://success-redirect.com", "https://error-redirect.com"),
-        FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), "https://success-redirect.com", "https://error-redirect.com"),
-        FileUploadFile(FileSequenceNo(THREE), Some(DocumentType("docType3")), "https://success-redirect.com", "https://error-redirect.com"),
-        FileUploadFile(FileSequenceNo(FOUR), Some(DocumentType("docType4")), "https://success-redirect.com", "https://error-redirect.com")))
+      Seq(FileUploadFile(FileSequenceNo(ONE), maybeDocumentType = None, Some("https://success-redirect.com"), Some("https://error-redirect.com")),
+        FileUploadFile(FileSequenceNo(TWO), Some(DocumentType("docType2")), Some("https://success-redirect.com"), Some("https://error-redirect.com")),
+        FileUploadFile(FileSequenceNo(THREE), Some(DocumentType("docType3")), Some("https://success-redirect.com"), Some("https://error-redirect.com")),
+        FileUploadFile(FileSequenceNo(FOUR), Some(DocumentType("docType4")), Some("https://success-redirect.com"), Some("https://error-redirect.com"))))
   )
 
   val TWENTY_FIVE = 25
