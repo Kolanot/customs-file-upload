@@ -50,6 +50,21 @@ class PayloadContentValidationActionSpec extends UnitSpec with MockitoSugar {
 
   "FileUploadPayloadValidationComposedAction" should {
 
+    "return 400 when file has an error redirect but not a success redirect" in new SetUp {
+
+      private val payload: Elem = TestXMLData.validFileUploadXml(includeSuccessRedirect = false)
+      val testAr: AuthorisedRequest[AnyContentAsXml] = AuthorisedRequest(conversationId, VersionOne,
+        clientId, NonCsp(Eori("EORI123")), FakeRequest("GET", "/").withXmlBody(payload))
+      val testVpr: ValidatedPayloadRequest[AnyContentAsXml] = testAr.toValidatedPayloadRequest(payload)
+      when(mockFileUploadConfigService.fileUploadConfig).thenReturn(fileUploadConfig.copy(fileGroupSizeMaximum = 2))
+      when(mockPayloadValidationAction.refine(testAr)).thenReturn(Future.successful(Right(testVpr)))
+
+      val result = await(action.refine(testVpr))
+
+      val expected = Left(new ErrorResponse(Status.BAD_REQUEST, "BAD_REQUEST", "Payload did not pass validation", ResponseContents("BAD_REQUEST", "If ErrorRedirect is present then SuccessRedirect must be too")).XmlResult)
+      result shouldBe expected
+    }
+
     "return 400 when FileGroupSize is greater than config value" in new SetUp {
 
       private val payload: Elem = TestXMLData.validFileUploadXml()

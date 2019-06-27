@@ -20,7 +20,7 @@ import scala.xml.Elem
 
 object TestXMLData {
 
-  def validFileUploadXml(fileGroupSize: Int = 2, fileSequenceNo1: Int = 1, fileSequenceNo2: Int = 2): Elem =
+  def validFileUploadXml(fileGroupSize: Int = 2, fileSequenceNo1: Int = 1, fileSequenceNo2: Int = 2, includeSuccessRedirect: Boolean = true): Elem =
     <FileUploadRequest
     xmlns="hmrc:fileupload"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -30,7 +30,7 @@ object TestXMLData {
         <File>
           <FileSequenceNo>{fileSequenceNo1}</FileSequenceNo>
           <DocumentType>document type {fileSequenceNo1}</DocumentType>
-          <SuccessRedirect>https://success-redirect.com</SuccessRedirect>
+          {if (includeSuccessRedirect) <SuccessRedirect>https://success-redirect.com</SuccessRedirect>}
           <ErrorRedirect>https://error-redirect.com</ErrorRedirect>
         </File>
         <File>

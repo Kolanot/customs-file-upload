@@ -112,12 +112,14 @@ class PayloadContentValidationAction @Inject()(val payloadValidationAction: Payl
   private val errorMaxFileSequenceNoMsg = s"$fileSequenceNoLabel must not be greater than $fileGroupSizeLabel"
   private val errorDuplicateFileSequenceNoMsg = s"$fileSequenceNoLabel contains duplicates"
   private val errorFileSequenceNoLessThanOneMsg = s"$fileSequenceNoLabel must start from 1"
+  private val errorErrorRedirectWithoutSuccessRedirectMsg = s"If $errorRedirectLabel is present then $successRedirectLabel must be too"
 
   private val errorMaxFileGroupSize = ResponseContents(BadRequestCode, errorMaxFileGroupSizeMsg)
   private val errorFileGroupSize = ResponseContents(BadRequestCode, errorFileGroupSizeMsg)
   private val errorMaxFileSequenceNo = ResponseContents(BadRequestCode, errorMaxFileSequenceNoMsg)
   private val errorDuplicateFileSequenceNo = ResponseContents(BadRequestCode, errorDuplicateFileSequenceNoMsg)
   private val errorFileSequenceNoLessThanOne = ResponseContents(BadRequestCode, errorFileSequenceNoLessThanOneMsg)
+  private val errorErrorRedirectWithoutSuccessRedirect = ResponseContents(BadRequestCode, errorErrorRedirectWithoutSuccessRedirectMsg)
 
   override def refine[A](vpr: ValidatedPayloadRequest[A]): Future[Either[Result, ValidatedFileUploadPayloadRequest[A]]] = {
     implicit val validatedFilePayloadRequest: ValidatedPayloadRequest[A] = vpr
@@ -155,6 +157,13 @@ class PayloadContentValidationAction @Inject()(val payloadValidationAction: Payl
 
   private def additionalValidation[A](fileUpload: FileUploadRequest)(implicit vpr: ValidatedPayloadRequest[A]): Either[ErrorResponse, Unit] = {
 
+    def errorRedirectOnly = validate(
+      fileUpload,
+      { b: FileUploadRequest =>
+        !b.files.exists(file => file.errorRedirect.isDefined && file.successRedirect.isEmpty)
+      },
+      errorErrorRedirectWithoutSuccessRedirect)
+
     def maxFileGroupSize = validate(
       fileUpload,
       { b: FileUploadRequest =>
@@ -185,7 +194,7 @@ class PayloadContentValidationAction @Inject()(val payloadValidationAction: Payl
         b.files.head.fileSequenceNo.value == 1},
       errorFileSequenceNoLessThanOne)
 
-    maxFileGroupSize ++ maxFileSequenceNo ++ fileGroupSize ++ duplicateFileSequenceNo ++ fileSequenceNoLessThanOne match {
+    errorRedirectOnly ++ maxFileGroupSize ++ maxFileSequenceNo ++ fileGroupSize ++ duplicateFileSequenceNo ++ fileSequenceNoLessThanOne match {
       case Seq() => Right(())
       case errors =>
         Left(new ErrorResponse(Status.BAD_REQUEST, BadRequestCode, "Payload did not pass validation", errors: _*))
