@@ -15,6 +15,8 @@ uses:
 documentation:
   - title: Overview
     content: !include docs/overview.md
+  - title: File upload workflow
+    content: !include docs/workflow.md
   - title: Versioning
     content: !include https://developer.service.hmrc.gov.uk/api-documentation/assets/common/docs/versioning.md
   - title: Errors
@@ -26,7 +28,7 @@ documentation:
   /upload:
       post:
         displayName: Submit an upload initiate request
-        description: Obtain a signed URL to upload files to
+        description: Obtain a signed URL to upload files to. The SuccessRedirect and ErrorRedirect fields are optional. If you provide them when you POST your file to AWS, then the response will be an automatic redirect. If you do not require these redirects for your application, then do not provide these redirect fields.
         headers:
           Accept:
             description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
@@ -60,7 +62,7 @@ documentation:
               application/xml:
                 description: Successful response payload
                 type: !include schemas/fileupload/FileUploadResponse.xsd
-                example: !include schemas/fileupload/FileUploadResponseExample.xml
+                example: !include examples/FileUploadResponseExample.xml
           400:
             body:
               application/xml:
