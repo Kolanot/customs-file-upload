@@ -28,7 +28,14 @@ documentation:
   /upload:
       post:
         displayName: Submit an upload initiate request
-        description: Obtain a signed URL to upload files to. The SuccessRedirect and ErrorRedirect fields are optional. If you provide them when you POST your file to AWS, then the response will be an automatic redirect. If you do not require these redirects for your application, then do not provide these redirect fields.
+        description: | 
+          Obtain a signed URL to upload files to.
+          
+          The SuccessRedirect and ErrorRedirect fields are optional.
+          
+          If you provide them when you POST your file, then the response will be an automatic redirect. 
+          
+          If you do not require these redirects for your application, then do not provide these redirect fields.
         headers:
           Accept:
             description: Specifies the version of the API that you want to call. See [versioning](/api-documentation/docs/reference-guide#versioning).
