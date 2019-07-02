@@ -78,6 +78,7 @@ class FileUploadDocumentationControllerSpec extends PlaySpec with MockitoSugar w
          |   "api":{
          |      "name":"Document Submission API",
          |      "description":"Allows traders to submit supporting documents for their declarations",
+         |      "categories": ["CUSTOMS"],
          |      "context":"customs/supporting-documentation",
          |      "versions":[
          |         {
