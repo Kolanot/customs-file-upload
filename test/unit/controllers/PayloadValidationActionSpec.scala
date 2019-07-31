@@ -18,9 +18,8 @@ package unit.controllers
 
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{AnyContentAsXml, Result}
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
 import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders.PayloadValidationAction
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
@@ -37,6 +36,7 @@ import scala.xml.SAXException
 
 class PayloadValidationActionSpec extends UnitSpec with MockitoSugar {
 
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private implicit val forConversions: ConversationIdRequest[AnyContentAsXml] = TestConversationIdRequest
   private val saxException = new SAXException("Boom!")
   private val expectedXmlSchemaErrorResult = ErrorResponse

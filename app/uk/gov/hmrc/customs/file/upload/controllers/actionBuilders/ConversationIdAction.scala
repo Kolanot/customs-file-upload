@@ -22,12 +22,13 @@ import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.customs.file.upload.services.{DateTimeService, UniqueIdsService}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class ConversationIdAction @Inject()(val correlationIdService: UniqueIdsService,
                                      val timeService: DateTimeService,
-                                     val logger: FileUploadLogger) extends ActionTransformer[Request, ConversationIdRequest] {
+                                     val logger: FileUploadLogger)
+                                    (implicit ec: ExecutionContext) extends ActionTransformer[Request, ConversationIdRequest] {
 
   override def transform[A](request: Request[A]): Future[ConversationIdRequest[A]] = {
 
@@ -36,4 +37,6 @@ class ConversationIdAction @Inject()(val correlationIdService: UniqueIdsService,
 
     Future.successful(r)
   }
+
+  override protected def executionContext: ExecutionContext = ec
 }

@@ -17,7 +17,7 @@
 package unit.controllers.actionBuilders
 
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse.{ErrorInternalServerError, errorBadRequest}
 import uk.gov.hmrc.customs.file.upload.controllers.CustomHeaderNames.{XBadgeIdentifierHeaderName, XEoriIdentifierHeaderName}
 import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders.{AuthAction, HeaderValidator}
@@ -57,6 +57,7 @@ class AuthActionSpec extends UnitSpec with MockitoSugar {
     ConversationIdRequest(conversationId, testFakeRequestWithBadgeIdEoriPair(badgeIdString = "(*&*(^&*&%")).toValidatedHeadersRequest(TestExtractedHeaders)
 
   trait SetUp extends AuthConnectorStubbing {
+    private implicit val ec = Helpers.stubControllerComponents().executionContext
     val mockLogger: FileUploadLogger = mock[FileUploadLogger]
     val mockFileUploadConfigService: FileUploadConfigService = mock[FileUploadConfigService]
     protected val customsAuthService = new CustomsAuthService(mockAuthConnector, mockLogger)

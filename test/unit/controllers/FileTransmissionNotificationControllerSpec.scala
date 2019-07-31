@@ -19,7 +19,6 @@ package unit.controllers
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play._
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc._
 import play.api.test.Helpers._
@@ -39,14 +38,14 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
   with MockitoSugar {
 
   trait SetUp {
+    val cc = Helpers.stubControllerComponents()
+    private implicit val ec = cc.executionContext
     val mockCdsLogger = mock[CdsLogger]
     val mockService = mock[FileUploadNotificationService]
     implicit val callbackToXmlNotification = mock[FileTransmissionCallbackToXmlNotification]
-
-    val controller = new FileTransmissionNotificationController(callbackToXmlNotification, mockService, mockCdsLogger)
+    val controller = new FileTransmissionNotificationController(callbackToXmlNotification, mockService, cc, mockCdsLogger)
   }
-
-
+  
   "file transmission notification controller" should {
 
     "return 204 when a valid SUCCESS request is received" in new SetUp {
@@ -77,7 +76,7 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
       contentAsString(result) mustBe BadRequestErrorResponseInvalidOutcome
       verifyZeroInteractions(mockService)
       PassByNameVerifier(mockCdsLogger, "error")
-        .withByNameParam[String]("Invalid JSON received. Body: None headers: List()")
+        .withByNameParam[String]("Invalid JSON received. Body: None headers: List((Host,localhost))")
         .verify()
     }
 
@@ -89,7 +88,7 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
       contentAsString(result) mustBe BadRequestErrorResponseInvalidJson
       verifyZeroInteractions(mockService)
       PassByNameVerifier(mockCdsLogger, "error")
-        .withByNameParam[String]("Malformed JSON received. Body: Some(some) headers: List((Content-Type,application/json))")
+        .withByNameParam[String]("Malformed JSON received. Body: Some(some) headers: List((Host,localhost), (Content-Type,application/json))")
         .verify()
     }
 
@@ -115,10 +114,8 @@ class FileTransmissionNotificationControllerSpec extends PlaySpec
         .withByNameParam(emulatedServiceFailure)
         .verify()
     }
-
   }
 
   private def fakeRequestWith(json: JsValue): FakeRequest[AnyContentAsJson] =
     FakeRequest().withJsonBody(json)
-
 }

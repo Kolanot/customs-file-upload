@@ -17,9 +17,9 @@
 package util
 
 import play.api.http.HeaderNames.AUTHORIZATION
+import play.api.mvc.request.RequestTarget
 import play.api.mvc.{AnyContentAsText, AnyContentAsXml}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.POST
 import util.RequestHeaders._
 import util.TestData.{cspBearerToken, nonCspBearerToken}
 import util.TestXMLData.{InvalidFileUploadXml, validFileUploadXml}
@@ -43,6 +43,7 @@ object FakeRequests {
 
     def withCustomToken(token: String): FakeRequest[R] = fakeRequest.withHeaders(AUTHORIZATION -> s"Bearer $token")
 
-    def postTo(endpoint: String): FakeRequest[R] = fakeRequest.copyFakeRequest(method = POST, uri = endpoint)
+    def postTo(endpoint: String): FakeRequest[R] = fakeRequest.withMethod("POST")
+      .withTarget(RequestTarget(path = endpoint, uriString = fakeRequest.uri, queryString = fakeRequest.queryString))
   }
 }

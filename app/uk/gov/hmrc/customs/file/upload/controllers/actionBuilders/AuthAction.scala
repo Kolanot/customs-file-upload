@@ -106,4 +106,5 @@ class AuthAction @Inject()(customsAuthService: CustomsAuthService,
     headerValidator.eoriMustBeValidAndPresent()
   }
 
+  override protected def executionContext: ExecutionContext = ec
 }

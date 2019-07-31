@@ -22,12 +22,12 @@ import org.mockito.ArgumentMatchers.{any, eq => meq}
 import org.mockito.Mockito.{atLeastOnce, times, verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.{AnyContentAsJson, Result}
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.file.upload.connectors.{ApiSubscriptionFieldsConnector, UpscanInitiateConnector}
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
-import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{ValidatedFileUploadPayloadRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.file.upload.model._
+import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{ValidatedFileUploadPayloadRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.file.upload.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.file.upload.services.{FileUploadBusinessService, FileUploadConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
@@ -43,6 +43,7 @@ class FileUploadBusinessServiceSpec extends UnitSpec with MockitoSugar {
   private val headerCarrier: HeaderCarrier = HeaderCarrier()
 
   trait SetUp {
+    private implicit val ec = Helpers.stubControllerComponents().executionContext
     protected val mockFileUploadMetadataRepo: FileUploadMetadataRepo = mock[FileUploadMetadataRepo]
     protected val mockLogger: FileUploadLogger = mock[FileUploadLogger]
     protected val mockApiSubscriptionFieldsConnector: ApiSubscriptionFieldsConnector = mock[ApiSubscriptionFieldsConnector]

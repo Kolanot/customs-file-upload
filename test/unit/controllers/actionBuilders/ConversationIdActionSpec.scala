@@ -17,7 +17,7 @@
 package unit.controllers.actionBuilders
 
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders.ConversationIdAction
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ConversationIdRequest
@@ -28,6 +28,7 @@ import util.TestData.{conversationId, stubUniqueIdsService}
 class ConversationIdActionSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
+    private implicit val ec = Helpers.stubControllerComponents().executionContext
     private val mockFileUploadLogger = mock[FileUploadLogger]
     protected val mockDateTimeService: DateTimeService = mock[DateTimeService]
 

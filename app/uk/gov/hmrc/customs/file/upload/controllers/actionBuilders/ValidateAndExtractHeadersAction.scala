@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHe
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.http.HttpErrorFunctions
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /** Action builder that validates headers.
   * <ol>
@@ -35,6 +35,7 @@ import scala.concurrent.Future
 @Singleton
 class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator,
                                                 logger: FileUploadLogger)
+                                               (implicit ec: ExecutionContext)
   extends ActionRefiner[ConversationIdRequest, ValidatedHeadersRequest] with HttpErrorFunctions {
     actionName =>
 
@@ -49,4 +50,6 @@ class ValidateAndExtractHeadersAction @Inject()(validator: HeaderValidator,
           Right(vhr)
       }
     }
+
+  override protected def executionContext: ExecutionContext = ec
 }

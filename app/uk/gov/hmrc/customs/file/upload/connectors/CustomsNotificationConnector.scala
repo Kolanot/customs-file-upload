@@ -59,5 +59,4 @@ class CustomsNotificationConnector @Inject()(http: HttpClient,
         Future.failed(e)
     }
   }
-  
 }

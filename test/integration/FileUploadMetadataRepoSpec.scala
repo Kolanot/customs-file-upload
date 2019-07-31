@@ -23,8 +23,8 @@ import org.mockito.Mockito
 import org.mockito.Mockito._
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Json
+import play.api.test.Helpers
 import play.modules.reactivemongo.ReactiveMongoComponent
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.CallbackFields
@@ -45,6 +45,7 @@ class FileUploadMetadataRepoSpec extends UnitSpec
   with MockitoSugar
   with MongoSpecSupport {
 
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private val mockLogger = mock[FileUploadLogger]
   private val mockErrorHandler = mock[FileUploadMetadataRepoErrorHandler]
   private lazy implicit val emptyHC: HeaderCarrier = HeaderCarrier()

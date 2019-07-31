@@ -19,6 +19,7 @@ package component
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, OptionValues}
 import play.api.libs.json.{JsObject, JsString}
 import play.api.mvc._
+import play.api.mvc.request.RequestTarget
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{status, _}
 import uk.gov.hmrc.customs.file.upload.model.{ApiSubscriptionKey, VersionOne}
@@ -29,7 +30,7 @@ import util.XmlOps.stringToXml
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, UpscanInitiateService}
 import util.{AuditService, TestData}
 
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
 
 class FileUploadSpec extends ComponentTestSpec
   with Matchers
@@ -81,12 +82,13 @@ class FileUploadSpec extends ComponentTestSpec
       setupExternalServiceExpectations()
 
       When("a POST request with data is sent to the API")
-      val result: Future[Result] = route(app = app, request).value
+      val result: Option[Future[Result]] = route(app = app, request)
+      val resultFuture = result.value
 
       Then("a response with a 200 (OK) status is received")
-      status(result) shouldBe OK
+      status(resultFuture) shouldBe OK
 
-      headers(result).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
+      headers(resultFuture).get(X_CONVERSATION_ID_NAME) shouldBe 'defined
     }
   }
 
@@ -101,13 +103,14 @@ class FileUploadSpec extends ComponentTestSpec
       authServiceUnauthorisesCustomsEnrolmentForNonCSP(cspBearerToken)
 
       When("a POST request with data is sent to the API")
-      val result: Future[Result] = route(app = app, request).value
+      val result: Option[Future[Result]] = route(app = app, request)
+      val resultFuture = result.value
 
       Then("a response with a 401 (UNAUTHORIZED) status is received")
-      status(result) shouldBe UNAUTHORIZED
+      status(resultFuture) shouldBe UNAUTHORIZED
 
       And("the response body is empty")
-      stringToXml(contentAsString(result)) shouldBe stringToXml(UnauthorisedRequestError)
+      stringToXml(contentAsString(resultFuture)) shouldBe stringToXml(UnauthorisedRequestError)
 
       And("the request was authorised with AuthService")
       eventually(verifyAuthServiceCalledForCsp())
@@ -120,7 +123,8 @@ class FileUploadSpec extends ComponentTestSpec
       Given("the API is available")
       val request = InvalidFileUploadRequest.fromNonCsp
         .withJsonBody(JsObject(Seq("something" -> JsString("I am a json"))))
-        .copyFakeRequest(method = POST, uri = endpoint)
+        .withMethod("POST")
+        .withTarget(RequestTarget(path = endpoint, uriString = InvalidFileUploadRequest.uri, queryString = InvalidFileUploadRequest.queryString))
       setupExternalServiceExpectations()
 
       When("a POST request with data is sent to the API")
@@ -139,7 +143,8 @@ class FileUploadSpec extends ComponentTestSpec
 
     scenario("Response status 400 when user submits a malformed xml payload") {
       Given("the API is available")
-      val request = MalformedXmlRequest.fromNonCsp.copyFakeRequest(method = POST, uri = endpoint)
+      val request = MalformedXmlRequest.fromNonCsp.withMethod("POST")
+        .withTarget(RequestTarget(path = endpoint, uriString = MalformedXmlRequest.uri, queryString = MalformedXmlRequest.queryString))
       setupExternalServiceExpectations()
 
       When("a POST request with data is sent to the API")

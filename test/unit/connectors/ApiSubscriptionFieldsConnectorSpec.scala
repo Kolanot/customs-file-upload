@@ -21,7 +21,7 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.file.upload.connectors.ApiSubscriptionFieldsConnector
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.{ApiSubscriptionFieldsResponse, FileUploadConfig}
@@ -45,6 +45,7 @@ class ApiSubscriptionFieldsConnectorSpec extends UnitSpec
   private val mockLogger = mock[FileUploadLogger]
   private val mockFileUploadConfigService = mock[FileUploadConfigService]
   private val mockFileUploadConfig = mock[FileUploadConfig]
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private implicit val hc: HeaderCarrier = HeaderCarrier()
   private implicit val vpr = TestData.TestCspValidatedPayloadRequest
 

@@ -16,6 +16,8 @@
 
 package unit.controllers
 
+import controllers.Assets
+import org.mockito.Mock
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
@@ -30,7 +32,9 @@ import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 
 class FileUploadDocumentationControllerSpec extends PlaySpec with MockitoSugar with Results with BeforeAndAfterEach {
 
-  private val mockService = mock[HttpErrorHandler]
+  private val assets = mock[Assets]
+  
+  private val cc = Helpers.stubControllerComponents()
 
   private val mockLogger = mock[FileUploadLogger]
 
@@ -39,11 +43,11 @@ class FileUploadDocumentationControllerSpec extends PlaySpec with MockitoSugar w
     "api.access.version-1.0.whitelistedApplicationIds.1" -> "v1AppId-2")
 
   private def getApiDefinitionWith(configMap: Map[String, Any]) =
-    new FileUploadDocumentationController(mockService, play.api.Configuration.from(configMap), mockLogger)
+    new FileUploadDocumentationController(assets, cc, play.api.Configuration.from(configMap), mockLogger)
       .definition()
 
   override def beforeEach() {
-    reset(mockService)
+    reset(assets)
   }
 
   "API Definition" should {

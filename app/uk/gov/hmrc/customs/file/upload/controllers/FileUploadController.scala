@@ -24,12 +24,13 @@ import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.file.upload.services.FileUploadBusinessService
-import uk.gov.hmrc.play.bootstrap.controller.BaseController
+import uk.gov.hmrc.play.bootstrap.controller.{BackendController, BaseController}
 
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class FileUploadController @Inject()(val conversationIdAction: ConversationIdAction,
+class FileUploadController @Inject()(cc: ControllerComponents,
+                                     val conversationIdAction: ConversationIdAction,
                                      val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction,
                                      val authAction: AuthAction,
                                      val payloadValidationAction: PayloadValidationAction,
@@ -37,7 +38,7 @@ class FileUploadController @Inject()(val conversationIdAction: ConversationIdAct
                                      val fileUploadBusinessService: FileUploadBusinessService,
                                      val logger: FileUploadLogger)
                                     (implicit ec: ExecutionContext)
-  extends BaseController {
+  extends BackendController(cc) {
 
   private def xmlOrEmptyBody: BodyParser[AnyContent] = BodyParser(rq => parse.xml(rq).map {
     case Right(xml) =>

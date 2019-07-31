@@ -87,8 +87,8 @@ class PayloadValidationAction @Inject()(xmlValidationService: XmlValidationServi
 
     loop(saxe, Nil)
   }
-  
-  
+
+  override protected def executionContext: ExecutionContext = ec
 }
 
 @Singleton
@@ -212,4 +212,6 @@ class PayloadContentValidationAction @Inject()(val payloadValidationAction: Payl
 
     if (rule(fileUploadRequest)) Seq() else leftWithLogContainingValue(fileUploadRequest, responseContents)
   }
+
+  override protected def executionContext: ExecutionContext = ec
 }

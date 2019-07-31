@@ -16,20 +16,22 @@
 
 package uk.gov.hmrc.customs.file.upload.controllers
 
+import controllers.Assets
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
-import play.api.http.{HttpErrorHandler, MimeTypes}
-import play.api.mvc.{Action, AnyContent}
+import play.api.http.MimeTypes
+import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import uk.gov.hmrc.customs.api.common.controllers.DocumentationController
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 
 @Singleton
-class FileUploadDocumentationController @Inject()(httpErrorHandler: HttpErrorHandler,
+class FileUploadDocumentationController @Inject()(assets: Assets,
+                                                  cc: ControllerComponents,
                                                   configuration: Configuration,
                                                   logger: FileUploadLogger)
-  extends DocumentationController(httpErrorHandler) {
+  extends DocumentationController(assets, cc) {
 
-  private lazy val mayBeV1WhitelistedApplicationIds = configuration.getStringSeq("api.access.version-1.0.whitelistedApplicationIds")
+  private lazy val mayBeV1WhitelistedApplicationIds: Option[Seq[String]] = configuration.getOptional[Seq[String]]("api.access.version-1.0.whitelistedApplicationIds")
 
   def definition(): Action[AnyContent] = Action {
     logger.debugWithoutRequestContext("FileUploadDocumentationController definition endpoint has been called")

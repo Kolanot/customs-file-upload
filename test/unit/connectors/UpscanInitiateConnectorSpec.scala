@@ -21,9 +21,9 @@ import org.mockito.Mockito._
 import org.scalatest.BeforeAndAfterEach
 import org.scalatest.concurrent.Eventually
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Writes
 import play.api.mvc.AnyContentAsJson
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.file.upload.connectors.UpscanInitiateConnector
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ValidatedFileUploadPayloadRequest
@@ -41,10 +41,10 @@ class UpscanInitiateConnectorSpec extends UnitSpec with MockitoSugar with Before
   private val mockWsPost = mock[HttpClient]
   private val mockLogger = mock[FileUploadLogger]
   private val mockFileUploadConfigService = mock[FileUploadConfigService]
-
-  private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockFileUploadConfigService)
-
+  private implicit val ec = Helpers.stubControllerComponents().executionContext
   private implicit val hc: HeaderCarrier = HeaderCarrier()
+  
+  private val connector = new UpscanInitiateConnector(mockWsPost, mockLogger, mockFileUploadConfigService)
 
   private val httpException = new NotFoundException("Emulated 404 response from a web call")
   private val tenThousand = 10000

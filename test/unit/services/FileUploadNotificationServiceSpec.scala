@@ -23,11 +23,11 @@ import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.scalatest.Assertion
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.libs.json.Reads
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.file.upload.connectors.CustomsNotificationConnector
-import uk.gov.hmrc.customs.file.upload.model.{BatchId, ConversationId, FileReference, FileTransmissionFailureOutcome, FileTransmissionNotification, FileTransmissionSuccessNotification, FileTransmissionSuccessOutcome}
+import uk.gov.hmrc.customs.file.upload.model._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.file.upload.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.file.upload.services.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
@@ -56,6 +56,7 @@ case class ExampleFileTransmissionNotification(fileReference: FileReference,
 class FileUploadNotificationServiceSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
+    private implicit val ec = Helpers.stubControllerComponents().executionContext
     private[FileUploadNotificationServiceSpec] val mockFileUploadMetadataRepo = mock[FileUploadMetadataRepo]
     private[FileUploadNotificationServiceSpec] val mockNotificationConnector = mock[CustomsNotificationConnector]
     private[FileUploadNotificationServiceSpec] val mockCdsLogger = mock[CdsLogger]

@@ -21,6 +21,7 @@ import org.mockito.Mockito.when
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.mvc.{AnyContentAsXml, Result}
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse._
 import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders.{HeaderValidator, ValidateAndExtractHeadersAction}
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
@@ -32,6 +33,7 @@ import util.TestData._
 class ValidateAndExtractHeadersActionSpec extends UnitSpec with MockitoSugar with TableDrivenPropertyChecks {
 
   trait SetUp {
+    private implicit val ec = Helpers.stubControllerComponents().executionContext
     val mockLogger: FileUploadLogger = mock[FileUploadLogger]
     val mockHeaderValidator: HeaderValidator = mock[HeaderValidator]
     val validateAndExtractHeadersAction: ValidateAndExtractHeadersAction = new ValidateAndExtractHeadersAction(mockHeaderValidator, mockLogger)

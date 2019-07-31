@@ -19,15 +19,14 @@ package unit.controllers.actionBuilders
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http.Status
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.AnyContentAsXml
-import play.api.test.FakeRequest
+import play.api.test.{FakeRequest, Helpers}
 import uk.gov.hmrc.customs.api.common.controllers.{ErrorResponse, ResponseContents}
-import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders.{PayloadValidationAction, PayloadContentValidationAction}
+import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders.{PayloadContentValidationAction, PayloadValidationAction}
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
+import uk.gov.hmrc.customs.file.upload.model._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest, _}
-import uk.gov.hmrc.customs.file.upload.model._
 import uk.gov.hmrc.customs.file.upload.services.FileUploadConfigService
 import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.clientId
@@ -41,6 +40,7 @@ import scala.xml.Elem
 class PayloadContentValidationActionSpec extends UnitSpec with MockitoSugar {
 
   trait SetUp {
+    private implicit val ec = Helpers.stubControllerComponents().executionContext
     val mockLogger: FileUploadLogger = mock[FileUploadLogger]
     val mockPayloadValidationAction: PayloadValidationAction = mock[PayloadValidationAction]
     val mockFileUploadConfigService: FileUploadConfigService = mock[FileUploadConfigService]

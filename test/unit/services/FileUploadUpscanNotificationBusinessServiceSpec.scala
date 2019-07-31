@@ -22,11 +22,11 @@ import java.util.UUID
 import org.mockito.ArgumentMatchers.{any, eq => ameq}
 import org.mockito.Mockito._
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
+import play.api.test.Helpers
 import uk.gov.hmrc.customs.file.upload.connectors.FileTransmissionConnector
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
-import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.file.upload.model._
+import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.file.upload.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.file.upload.services.{FileUploadConfigService, FileUploadUpscanNotificationBusinessService}
 import uk.gov.hmrc.play.test.UnitSpec
@@ -75,6 +75,7 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     fileTransmissionServiceURL)
 
   trait SetUp {
+    private implicit val ec = Helpers.stubControllerComponents().executionContext
     protected val mockRepo = mock[FileUploadMetadataRepo]
     protected val mockConnector = mock[FileTransmissionConnector]
     protected val mockConfig = mock[FileUploadConfigService]

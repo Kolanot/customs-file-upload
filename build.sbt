@@ -1,7 +1,5 @@
 import AppDependencies._
 import com.typesafe.sbt.packager.MappingsHelper._
-import org.scalastyle.sbt.ScalastylePlugin._
-import play.sbt.routes.RoutesKeys._
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
@@ -108,10 +106,9 @@ lazy val playPublishingSettings: Seq[sbt.Setting[_]] = sbtrelease.ReleasePlugin.
 lazy val scoverageSettings: Seq[Setting[_]] = Seq(
   coverageExcludedPackages := List(
       "<empty>"
-      ,"Reverse.*"
       ,"uk\\.gov\\.hmrc\\.customs\\.file\\.upload\\.model\\..*"
       ,"uk\\.gov\\.hmrc\\.customs\\.file\\.upload\\.views\\..*"
-      ,".*(AuthService|BuildInfo|Routes).*"
+      ,".*(Reverse|AuthService|BuildInfo|Routes).*"
     ).mkString(";"),
   coverageMinimum := 97,
   coverageFailOnMinimum := true,
