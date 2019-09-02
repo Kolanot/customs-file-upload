@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.FileUploadConfig
 
 @Singleton
-class FileUploadConfigService @Inject()(configValidatedNel: ConfigValidatedNelAdaptor, logger: FileUploadLogger) {
+  class FileUploadConfigService @Inject()(configValidatedNel: ConfigValidatedNelAdaptor, logger: FileUploadLogger) {
 
   private val root = configValidatedNel.root
   private val upscanV1Service = configValidatedNel.service("upscan-initiate-v1")
@@ -44,10 +44,12 @@ class FileUploadConfigService @Inject()(configValidatedNel: ConfigValidatedNelAd
   private val fileTransmissionUrl = fileTransmissionService.serviceUrl
   private val fileTransmissionCallbackUrl =  root.string("file-transmission-callback.url")
   private val upscanInitiateMaximumFileSize = root.int("fileUpload.fileSize.maximum")
+  private val ttlInSeconds = root.int("ttlInSeconds")
 
   private val validatedFileUploadConfig: CustomsValidatedNel[FileUploadConfig] = (apiSubscriptionFieldsServiceUrlNel,
     customsNotificationsServiceUrlNel, bearerTokenNel, upscanV1InitiateUrl, upscanV2InitiateUrl, upscanCallbackUrl,
-    upscanInitiateMaximumFileSize, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl, fileTransmissionUrl
+    upscanInitiateMaximumFileSize, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl,
+    fileTransmissionUrl, ttlInSeconds
   ) mapN FileUploadConfig
 
   private val customsConfigHolder =

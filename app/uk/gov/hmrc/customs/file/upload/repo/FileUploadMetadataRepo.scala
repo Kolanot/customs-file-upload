@@ -22,11 +22,12 @@ import play.api.libs.json.Json.toJsFieldJsValueWrapper
 import play.api.libs.json.{Format, Json}
 import play.modules.reactivemongo.ReactiveMongoComponent
 import reactivemongo.api.indexes.{Index, IndexType}
-import reactivemongo.bson.BSONObjectID
+import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import reactivemongo.play.json.JsObjectDocumentWriter
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.{CallbackFields, FileReference, FileUploadMetadata, SubscriptionFieldsId}
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
+import uk.gov.hmrc.customs.file.upload.services.FileUploadConfigService
 import uk.gov.hmrc.mongo.ReactiveRepository
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -44,6 +45,7 @@ trait FileUploadMetadataRepo {
 @Singleton
 class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMongoComponent,
                                             errorHandler: FileUploadMetadataRepoErrorHandler,
+                                            config: FileUploadConfigService,
                                             logger: FileUploadLogger)
                                            (implicit ec: ExecutionContext)
   extends ReactiveRepository[FileUploadMetadata, BSONObjectID](
@@ -53,14 +55,20 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
   ) with FileUploadMetadataRepo {
 
   private implicit val format: Format[FileUploadMetadata] = FileUploadMetadata.fileUploadMetadataJF
-
-  override def indexes: Seq[Index] = Seq(
-    Index(
-      key = Seq("files.reference" -> IndexType.Ascending, "csId" -> IndexType.Ascending),
-      name = Some("csId-and-file-reference"),
-      unique = true
-    )
+  private val indexName = "csId-and-file-reference"
+  private val cacheTtl = config.fileUploadConfig.ttlInSeconds
+  private val index = Index(
+    key = Seq("files.reference" -> IndexType.Ascending, "csId" -> IndexType.Ascending),
+    name = Some(indexName),
+    unique = true,
+    options = BSONDocument("expireAfterSeconds" -> cacheTtl)
   )
+
+  dropInvalidIndexes.flatMap { _ =>
+    collection.indexesManager.ensure(index)
+  }
+
+  override def indexes: Seq[Index] = Seq(index)
 
   override def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
     logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
@@ -92,4 +100,19 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
           Some(record)
       })
   }
+
+  private def dropInvalidIndexes: Future[_] =
+    collection.indexesManager.list().flatMap { indexes =>
+      indexes
+        .find { index =>
+          index.name.contains(indexName) &&
+            !index.options.getAs[Int]("expireAfterSeconds").contains(cacheTtl)
+        }
+        .map { _ =>
+          logger.debugWithoutRequestContext(s"dropping $indexName index as ttl value is incorrect")
+          collection.indexesManager.drop(indexName)
+        }
+        .getOrElse(Future.successful(()))
+    }
+  
 }

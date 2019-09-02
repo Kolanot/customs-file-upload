@@ -72,7 +72,8 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     "UPSCAN_URL_IGNORED",
     fileGroupSizeMaximum,
     fileTransmissionCallbackUrl,
-    fileTransmissionServiceURL)
+    fileTransmissionServiceURL,
+    60)
 
   trait SetUp {
     private implicit val ec = Helpers.stubControllerComponents().executionContext

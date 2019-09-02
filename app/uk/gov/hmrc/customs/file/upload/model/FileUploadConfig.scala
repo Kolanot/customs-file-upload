@@ -26,4 +26,5 @@ case class FileUploadConfig(apiSubscriptionFieldsBaseUrl: String,
                             fileUploadCallbackUrl: String,
                             fileGroupSizeMaximum: Int,
                             fileTransmissionCallbackUrl: String,
-                            fileTransmissionBaseUrl: String)
+                            fileTransmissionBaseUrl: String,
+                            ttlInSeconds: Int)
