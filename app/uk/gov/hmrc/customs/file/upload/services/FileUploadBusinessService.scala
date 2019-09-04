@@ -39,6 +39,7 @@ import scala.xml._
 class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiateConnector,
                                           fileUploadMetadataRepo: FileUploadMetadataRepo,
                                           uuidService: UuidService,
+                                          dateTimeService: DateTimeService,
                                           logger: FileUploadLogger,
                                           apiSubFieldsConnector: ApiSubscriptionFieldsConnector,
                                           config: FileUploadConfigService)
@@ -109,7 +110,7 @@ class FileUploadBusinessService @Inject()(upscanInitiateConnector: UpscanInitiat
     }
 
     val metadata = FileUploadMetadata(request.fileUploadRequest.declarationId, extractEori(request.authorisedAs), sfId,
-      BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, batchFiles)
+      BatchId(uuidService.uuid()), request.fileUploadRequest.fileGroupSize.value, dateTimeService.nowUtc(), batchFiles)
 
     fileUploadMetadataRepo.create(metadata)
   }

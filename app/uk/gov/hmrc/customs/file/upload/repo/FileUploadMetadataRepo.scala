@@ -25,8 +25,8 @@ import reactivemongo.api.indexes.{Index, IndexType}
 import reactivemongo.bson.{BSONDocument, BSONObjectID}
 import reactivemongo.play.json.JsObjectDocumentWriter
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
-import uk.gov.hmrc.customs.file.upload.model.{CallbackFields, FileReference, FileUploadMetadata, SubscriptionFieldsId}
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
+import uk.gov.hmrc.customs.file.upload.model.{CallbackFields, FileReference, FileUploadMetadata, SubscriptionFieldsId}
 import uk.gov.hmrc.customs.file.upload.services.FileUploadConfigService
 import uk.gov.hmrc.mongo.ReactiveRepository
 
@@ -55,20 +55,27 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
   ) with FileUploadMetadataRepo {
 
   private implicit val format: Format[FileUploadMetadata] = FileUploadMetadata.fileUploadMetadataJF
-  private val indexName = "csId-and-file-reference"
-  private val cacheTtl = config.fileUploadConfig.ttlInSeconds
-  private val index = Index(
-    key = Seq("files.reference" -> IndexType.Ascending, "csId" -> IndexType.Ascending),
-    name = Some(indexName),
-    unique = true,
-    options = BSONDocument("expireAfterSeconds" -> cacheTtl)
+
+  private val ttlIndexName = "createdAt-Index"
+  private val ttlInSeconds = config.fileUploadConfig.ttlInSeconds
+  private val ttlIndex = Index(
+    key = Seq("createdAt" -> IndexType.Descending),
+    name = Some(ttlIndexName),
+    unique = false,
+    options = BSONDocument("expireAfterSeconds" -> ttlInSeconds)
   )
 
   dropInvalidIndexes.flatMap { _ =>
-    collection.indexesManager.ensure(index)
+    collection.indexesManager.ensure(ttlIndex)
   }
 
-  override def indexes: Seq[Index] = Seq(index)
+  override def indexes: Seq[Index] = Seq(
+    Index(
+      key = Seq("files.reference" -> IndexType.Ascending, "csId" -> IndexType.Ascending),
+      name = Some("csId-and-file-reference"),
+      unique = true),
+    ttlIndex
+  )
 
   override def create(fileUploadMetadata: FileUploadMetadata)(implicit r: HasConversationId): Future[Boolean] = {
     logger.debug(s"saving fileUploadMetadata: $fileUploadMetadata")
@@ -105,12 +112,12 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
     collection.indexesManager.list().flatMap { indexes =>
       indexes
         .find { index =>
-          index.name.contains(indexName) &&
-            !index.options.getAs[Int]("expireAfterSeconds").contains(cacheTtl)
+          index.name.contains(ttlIndexName) &&
+            !index.options.getAs[Int]("expireAfterSeconds").contains(ttlInSeconds)
         }
         .map { _ =>
-          logger.debugWithoutRequestContext(s"dropping $indexName index as ttl value is incorrect")
-          collection.indexesManager.drop(indexName)
+          logger.debugWithoutRequestContext(s"dropping $ttlIndexName index as ttl value is incorrect")
+          collection.indexesManager.drop(ttlIndexName)
         }
         .getOrElse(Future.successful(()))
     }
