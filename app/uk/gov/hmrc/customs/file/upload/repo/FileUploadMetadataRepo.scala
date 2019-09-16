@@ -121,5 +121,4 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
         }
         .getOrElse(Future.successful(()))
     }
-  
 }

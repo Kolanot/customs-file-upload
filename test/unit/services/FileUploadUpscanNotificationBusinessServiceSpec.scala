@@ -67,7 +67,6 @@ class FileUploadUpscanNotificationBusinessServiceSpec extends UnitSpec with Mock
     "some-token",
     "UPSCAN_INITIATE_V1_URL",
     "UPSCAN_INITIATE_V2_URL",
-    "UPSCAN_URL_IGNORED",
     TenMb,
     "UPSCAN_URL_IGNORED",
     fileGroupSizeMaximum,

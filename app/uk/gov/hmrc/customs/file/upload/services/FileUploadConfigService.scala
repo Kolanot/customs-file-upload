@@ -38,7 +38,6 @@ import uk.gov.hmrc.customs.file.upload.model.FileUploadConfig
 
   private val upscanV1InitiateUrl = upscanV1Service.serviceUrl
   private val upscanV2InitiateUrl = upscanV2Service.serviceUrl
-  private val upscanCallbackUrl = root.string("upscan-callback.url")
   private val fileUploadUpscanCallbackUrl = root.string("file-upload-upscan-callback.url")
   private val fileGroupSizeMaximum = root.int("fileUpload.fileGroupSize.maximum")
   private val fileTransmissionUrl = fileTransmissionService.serviceUrl
@@ -47,7 +46,7 @@ import uk.gov.hmrc.customs.file.upload.model.FileUploadConfig
   private val ttlInSeconds = root.int("ttlInSeconds")
 
   private val validatedFileUploadConfig: CustomsValidatedNel[FileUploadConfig] = (apiSubscriptionFieldsServiceUrlNel,
-    customsNotificationsServiceUrlNel, bearerTokenNel, upscanV1InitiateUrl, upscanV2InitiateUrl, upscanCallbackUrl,
+    customsNotificationsServiceUrlNel, bearerTokenNel, upscanV1InitiateUrl, upscanV2InitiateUrl,
     upscanInitiateMaximumFileSize, fileUploadUpscanCallbackUrl, fileGroupSizeMaximum, fileTransmissionCallbackUrl,
     fileTransmissionUrl, ttlInSeconds
   ) mapN FileUploadConfig

@@ -36,7 +36,6 @@ class FileUploadConfigServiceSpec extends UnitSpec with MockitoSugar {
       |microservice.services.customs-notification.port=1112
       |microservice.services.customs-notification.bearer-token=some-token
       |microservice.services.customs-notification.context=/some-context2
-      |upscan-callback.url="http://upscan-callback.url"
       |file-upload-upscan-callback.url="http://file-upload-upscan-callback.url"
       |file-transmission-callback.url="http://some-host3:1113/file-transmission"
       |fileUpload.fileGroupSize.maximum=10
@@ -90,7 +89,6 @@ class FileUploadConfigServiceSpec extends UnitSpec with MockitoSugar {
           |Service configuration not found for key: upscan-initiate-v1.context
           |Could not find config upscan-initiate-v2.host
           |Service configuration not found for key: upscan-initiate-v2.context
-          |Could not find config key 'upscan-callback.url'
           |Could not find config key 'fileUpload.fileSize.maximum'
           |Could not find config key 'file-upload-upscan-callback.url'
           |Could not find config key 'fileUpload.fileGroupSize.maximum'

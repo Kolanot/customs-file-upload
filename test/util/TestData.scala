@@ -53,7 +53,7 @@ object TestData {
 
   val TenMb = 10485760
   val fileUploadConfig = FileUploadConfig("API_SUBSCRIPTION_FIELDS_URL", "CUSTOMS_NOTIFICATION_URL",
-    "some-token", "UPSCAN_INITIATE_V1_URL", "UPSCAN_INITIATE_V2_URL", "UPSCAN_URL_IGNORED",
+    "some-token", "UPSCAN_INITIATE_V1_URL", "UPSCAN_INITIATE_V2_URL",
     TenMb, "UPSCAN_URL_IGNORED", 3, "fileTransmissionCallbackUrl",  "fileTransmissionUrl", 60)
 
   val validBadgeIdentifierValue = "BADGEID123"
