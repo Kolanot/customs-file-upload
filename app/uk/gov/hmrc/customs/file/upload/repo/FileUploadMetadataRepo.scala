@@ -40,6 +40,8 @@ trait FileUploadMetadataRepo {
   def fetch(reference: FileReference)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]]
 
   def update(csId: SubscriptionFieldsId, reference: FileReference, callbackFields: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]]
+
+  def deleteAll(): Future[Unit]
 }
 
 @Singleton
@@ -91,6 +93,15 @@ class FileUploadMetadataMongoRepo @Inject()(reactiveMongoComponent: ReactiveMong
 
     val selector = "files.reference" -> toJsFieldJsValueWrapper(reference)
     find(selector).map (_.headOption)
+  }
+
+  override def deleteAll(): Future[Unit] = {
+
+    logger.debugWithoutRequestContext(s"deleting all file upload metadata")
+
+    removeAll().map {result =>
+      logger.debugWithoutRequestContext(s"deleted ${result.n} file upload metadata")
+    }
   }
 
   def update(csId: SubscriptionFieldsId, reference: FileReference, cf: CallbackFields)(implicit r: HasConversationId): Future[Option[FileUploadMetadata]] = {
