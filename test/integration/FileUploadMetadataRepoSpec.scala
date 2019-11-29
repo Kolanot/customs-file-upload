@@ -167,6 +167,14 @@ class FileUploadMetadataRepoSpec extends IntegrationTestSpec
       await(repository.deleteAll())
 
       collectionSize(repository) shouldBe 0
+
+      PassByNameVerifier(mockLogger, "debugWithoutRequestContext")
+        .withByNameParam("deleting all file upload metadata")
+        .verify()
+
+      PassByNameVerifier(mockLogger, "debugWithoutRequestContext")
+        .withByNameParam("deleted 2 file upload metadata")
+        .verify()
     }
   }
 }
