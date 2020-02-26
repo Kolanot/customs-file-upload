@@ -30,7 +30,7 @@ import util.XmlOps.stringToXml
 import util.externalservices.{ApiSubscriptionFieldsService, AuthService, UpscanInitiateService}
 import util.{AuditService, TestData}
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Future
 
 class FileUploadSpec extends ComponentTestSpec
   with Matchers

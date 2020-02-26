@@ -18,7 +18,7 @@ package unit.services
 
 import com.typesafe.config.{Config, ConfigFactory}
 import org.scalatestplus.mockito.MockitoSugar
-import play.api.{Configuration, Environment, Mode}
+import play.api.{Configuration, Mode}
 import uk.gov.hmrc.customs.api.common.config.ConfigValidatedNelAdaptor
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.services.FileUploadConfigService

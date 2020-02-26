@@ -1,24 +1,19 @@
 import AppDependencies._
-import com.typesafe.sbt.packager.MappingsHelper._
 import sbt.Keys._
 import sbt.Tests.{Group, SubProcess}
 import sbt._
-import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, defaultSettings, scalaSettings, targetJvm}
+import uk.gov.hmrc.DefaultBuildSettings.{addTestReportOption, targetJvm}
 import uk.gov.hmrc.PublishingSettings._
 import uk.gov.hmrc.SbtAutoBuildPlugin
+import uk.gov.hmrc.gitstamp.GitStampPlugin._
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin
 import uk.gov.hmrc.sbtdistributables.SbtDistributablesPlugin._
 import uk.gov.hmrc.versioning.SbtGitVersioning
 
 import scala.language.postfixOps
 
-mappings in Universal ++= directory(baseDirectory.value / "public")
-// my understanding is publishing processed changed when we moved to the open and
-// now it is done in production mode (was in dev previously). hence, we encounter the problem accessing "public" folder
-// see https://stackoverflow.com/questions/36906106/reading-files-from-public-folder-in-play-framework-in-production
-
 name := "customs-file-upload"
-
+scalaVersion := "2.12.10"
 targetJvm := "jvm-1.8"
 
 lazy val allResolvers = resolvers ++= Seq(
@@ -94,13 +89,9 @@ lazy val acceptanceTestSettings =
       addTestReportOption(ComponentTest, "component-reports")
     )
 
-lazy val commonSettings: Seq[Setting[_]] = scalaSettings ++
-  publishingSettings ++
-  defaultSettings() ++
-  gitStampSettings
+lazy val commonSettings: Seq[Setting[_]] = publishingSettings ++ gitStampSettings
 
-lazy val playPublishingSettings: Seq[sbt.Setting[_]] = sbtrelease.ReleasePlugin.releaseSettings ++
-  Seq(credentials += SbtCredentials) ++
+lazy val playPublishingSettings: Seq[sbt.Setting[_]] = Seq(credentials += SbtCredentials) ++
   publishAllArtefacts
 
 lazy val scoverageSettings: Seq[Setting[_]] = Seq(
@@ -120,7 +111,7 @@ scalastyleConfig := baseDirectory.value / "project" / "scalastyle-config.xml"
 
 val compileDependencies = Seq(customsApiCommon, simpleReactiveMongo)
 
-val testDependencies = Seq(hmrcTest, scalaTest, scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
+val testDependencies = Seq(hmrcTest, scalaTestPlusPlay, wireMock, mockito, customsApiCommonTests, reactiveMongoTest)
 
 unmanagedResourceDirectories in Compile += baseDirectory.value / "public"
 

@@ -19,7 +19,6 @@ package uk.gov.hmrc.customs.file.upload.controllers.actionBuilders
 import javax.inject.{Inject, Singleton}
 import play.api.mvc.{ActionRefiner, RequestHeader, Result}
 import uk.gov.hmrc.customs.api.common.controllers.ErrorResponse
-import uk.gov.hmrc.customs.file.upload.controllers.CustomHeaderNames.XEoriIdentifierHeaderName
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{AuthorisedRequest, HasConversationId, HasRequest, ValidatedHeadersRequest}

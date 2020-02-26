@@ -19,12 +19,12 @@ package uk.gov.hmrc.customs.file.upload.controllers
 import javax.inject.{Inject, Singleton}
 import play.api.http.ContentTypes
 import play.api.mvc._
-import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders.{AuthAction, ConversationIdAction, PayloadContentValidationAction, PayloadValidationAction, ValidateAndExtractHeadersAction}
+import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders._
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ValidatedFileUploadPayloadRequest
 import uk.gov.hmrc.customs.file.upload.services.FileUploadBusinessService
-import uk.gov.hmrc.play.bootstrap.controller.{BackendController, BaseController}
+import uk.gov.hmrc.play.bootstrap.controller.BackendController
 
 import scala.concurrent.ExecutionContext
 

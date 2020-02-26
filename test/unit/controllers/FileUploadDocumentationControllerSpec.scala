@@ -17,12 +17,10 @@
 package unit.controllers
 
 import controllers.Assets
-import org.mockito.Mock
 import org.mockito.Mockito.reset
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.mockito.MockitoSugar
 import org.scalatestplus.play._
-import play.api.http.HttpErrorHandler
 import play.api.libs.json.Json
 import play.api.mvc._
 import play.api.test.Helpers._
