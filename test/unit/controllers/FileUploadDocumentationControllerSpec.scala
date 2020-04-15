@@ -101,13 +101,15 @@ class FileUploadDocumentationControllerSpec extends PlaySpec with MockitoSugar w
           |                  "name":"callbackUrl",
           |                  "description":"What's your callback URL for receiving notifications?",
           |                  "type":"URL",
-          |                  "hint":"This is how we'll notify you when we've completed processing. It must include https and port 443."
+          |                  "hint":"This is how we'll notify you when we've completed processing. It must include https and port 443.",
+          |                  "shortDescription" : "Callback URL"
           |               },
           |               {
           |                  "name":"securityToken",
           |                  "description":"What's the value of the HTTP Authorization header we should use to notify you?",
           |                  "type":"SecureToken",
-          |                  "hint":"For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk"
+          |                  "hint":"For example: Basic YXNkZnNhZGZzYWRmOlZLdDVOMVhk",
+          |                  "shortDescription" : "Authorization Token"
           |               }
           |            ]
           |         }
