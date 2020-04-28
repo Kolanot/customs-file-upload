@@ -28,10 +28,9 @@ import uk.gov.hmrc.customs.file.upload.model._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{AuthorisedRequest, ValidatedPayloadRequest, _}
 import uk.gov.hmrc.customs.file.upload.services.FileUploadConfigService
-import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.clientId
 import util.TestData.{conversationId, fileUploadConfig}
-import util.TestXMLData
+import util.{TestXMLData, UnitSpec}
 
 import scala.concurrent.Future
 import scala.xml.Elem

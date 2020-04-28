@@ -20,7 +20,7 @@ import java.net.URL
 import java.time.Instant
 
 import play.api.libs.json.{JsValue, Json}
-import uk.gov.hmrc.customs.file.upload.model.{FailedFileStatus, FileReference, ReadyFileStatus, UploadedDetails, UploadedErrorDetails, UploadedFailedCallbackBody, UploadedReadyCallbackBody}
+import uk.gov.hmrc.customs.file.upload.model._
 import util.TestData.FileReferenceOne
 
 import scala.xml.Elem

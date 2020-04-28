@@ -18,7 +18,7 @@ package util
 
 import java.net.URL
 
-import uk.gov.hmrc.customs.file.upload.model.{FileSequenceNo, FileTransmission, FileTransmissionBatch, FileTransmissionFailureNotification, FileTransmissionFailureOutcome, FileTransmissionFile, FileTransmissionInterface, FileTransmissionProperty, FileTransmissionSuccessNotification, FileTransmissionSuccessOutcome}
+import uk.gov.hmrc.customs.file.upload.model._
 import util.TestData.{BatchIdOne, FileReferenceOne, InitiateDate}
 
 object FileTransmissionTestData {

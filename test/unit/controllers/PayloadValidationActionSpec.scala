@@ -27,8 +27,8 @@ import uk.gov.hmrc.customs.file.upload.model.Csp
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{ConversationIdRequest, ValidatedPayloadRequest}
 import uk.gov.hmrc.customs.file.upload.services.XmlValidationService
-import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData.{conversationId, _}
+import util.UnitSpec
 
 import scala.concurrent.Future
 import scala.xml.SAXException

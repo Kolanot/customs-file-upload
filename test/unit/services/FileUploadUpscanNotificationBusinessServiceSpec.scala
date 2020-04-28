@@ -29,9 +29,9 @@ import uk.gov.hmrc.customs.file.upload.model._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.file.upload.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.file.upload.services.{FileUploadConfigService, FileUploadUpscanNotificationBusinessService}
-import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
 import util.TestData.{TenMb, _}
+import util.UnitSpec
 
 import scala.concurrent.Future
 

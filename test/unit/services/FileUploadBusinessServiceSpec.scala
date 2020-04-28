@@ -31,9 +31,9 @@ import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{ValidatedFileUpload
 import uk.gov.hmrc.customs.file.upload.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.file.upload.services.{DateTimeService, FileUploadBusinessService, FileUploadConfigService, UuidService}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.test.UnitSpec
 import util.ApiSubscriptionFieldsTestData.apiSubscriptionFieldsResponse
 import util.TestData._
+import util.UnitSpec
 
 import scala.concurrent.Future
 import scala.xml.NodeSeq

@@ -18,8 +18,8 @@ package unit.model
 
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import uk.gov.hmrc.customs.file.upload.model.FileTransmissionCallbackDecider
-import uk.gov.hmrc.play.test.UnitSpec
 import util.FileTransmissionTestData._
+import util.UnitSpec
 
 class FileTransmissionNotificationModelSpec extends UnitSpec {
 

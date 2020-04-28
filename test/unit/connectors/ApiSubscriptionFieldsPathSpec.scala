@@ -17,8 +17,7 @@
 package unit.connectors
 
 import uk.gov.hmrc.customs.file.upload.connectors.ApiSubscriptionFieldsPath
-import uk.gov.hmrc.play.test.UnitSpec
-import util.ApiSubscriptionFieldsTestData
+import util.{ApiSubscriptionFieldsTestData, UnitSpec}
 
 class ApiSubscriptionFieldsPathSpec extends UnitSpec with ApiSubscriptionFieldsTestData {
 

@@ -22,8 +22,8 @@ import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders.ConversationId
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ConversationIdRequest
 import uk.gov.hmrc.customs.file.upload.services.DateTimeService
-import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData.{conversationId, stubUniqueIdsService}
+import util.UnitSpec
 
 class ConversationIdActionSpec extends UnitSpec with MockitoSugar {
 

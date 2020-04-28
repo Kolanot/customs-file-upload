@@ -24,9 +24,9 @@ import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.Csp
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{AuthorisedRequest, ConversationIdRequest}
-import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.TestData._
+import util.UnitSpec
 
 class FileUploadLoggerSpec extends UnitSpec with MockitoSugar {
 

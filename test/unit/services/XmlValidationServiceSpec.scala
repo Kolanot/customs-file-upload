@@ -24,8 +24,8 @@ import org.scalatestplus.mockito.MockitoSugar
 import play.api.Configuration
 import play.api.test.Helpers
 import uk.gov.hmrc.customs.file.upload.services.XmlValidationService
-import uk.gov.hmrc.play.test.UnitSpec
 import util.TestXMLData.{InvalidFileUploadXml, InvalidFileUploadXmlWithIntegerError, InvalidFileUploadXmlWithTwoErrors, validFileUploadXml}
+import util.UnitSpec
 
 import scala.xml.{Node, SAXException}
 

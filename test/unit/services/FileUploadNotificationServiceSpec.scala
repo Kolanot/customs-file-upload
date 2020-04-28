@@ -31,10 +31,9 @@ import uk.gov.hmrc.customs.file.upload.model._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.file.upload.repo.FileUploadMetadataRepo
 import uk.gov.hmrc.customs.file.upload.services.{CallbackToXmlNotification, FileUploadCustomsNotification, FileUploadNotificationService}
-import uk.gov.hmrc.play.test.UnitSpec
 import unit.services.ExampleFileTransmissionStatus.ExampleFileTransmissionStatus
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
-import util.TestData
+import util.{TestData, UnitSpec}
 import util.TestData._
 import util.XmlOps._
 

@@ -25,8 +25,8 @@ import uk.gov.hmrc.customs.file.upload.logging.LoggingHelper
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{ConversationIdRequest, ValidatedHeadersRequest}
 import uk.gov.hmrc.customs.file.upload.model.{ClientId, Csp, VersionOne}
-import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
+import util.UnitSpec
 
 class LoggingHelperSpec extends UnitSpec with MockitoSugar {
 

@@ -18,8 +18,8 @@ package unit.model
 
 import play.api.libs.json.{JsSuccess, Json}
 import uk.gov.hmrc.customs.file.upload.model.FileUploadMetadata
-import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData.FileMetadataWithFileOne
+import util.UnitSpec
 
 class FileUploadMetadataSpec extends UnitSpec {
   private val jsonString = """{

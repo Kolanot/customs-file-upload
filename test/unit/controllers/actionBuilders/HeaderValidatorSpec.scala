@@ -28,10 +28,9 @@ import uk.gov.hmrc.customs.file.upload.controllers.actionBuilders.HeaderValidato
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.{ConversationIdRequest, ExtractedHeaders, ExtractedHeadersImpl, HasConversationId}
 import uk.gov.hmrc.customs.file.upload.model.{Eori, VersionOne}
-import uk.gov.hmrc.play.test.UnitSpec
 import util.MockitoPassByNameHelper.PassByNameVerifier
 import util.RequestHeaders._
-import util.{ApiSubscriptionFieldsTestData, TestData}
+import util.{ApiSubscriptionFieldsTestData, TestData, UnitSpec}
 
 class HeaderValidatorSpec extends UnitSpec with TableDrivenPropertyChecks with MockitoSugar {
 

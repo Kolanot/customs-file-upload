@@ -26,9 +26,8 @@ import uk.gov.hmrc.customs.file.upload.model.CspWithEori
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ActionBuilderModelHelper._
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders._
 import uk.gov.hmrc.customs.file.upload.services.{CustomsAuthService, FileUploadConfigService}
-import uk.gov.hmrc.play.test.UnitSpec
 import util.TestData._
-import util.{AuthConnectorStubbing, RequestHeaders}
+import util.{AuthConnectorStubbing, RequestHeaders, UnitSpec}
 
 class AuthActionSpec extends UnitSpec with MockitoSugar {
 
