@@ -109,7 +109,7 @@ object TestData {
   lazy val mockUuidService: UuidService = mock[UuidService]
 
   object TestModule extends AbstractModule {
-    def configure(): Unit = {
+    override def configure(): Unit = {
       bind(classOf[UuidService]) toInstance mockUuidService
     }
 

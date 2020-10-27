@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ValidatedFileUploadP
 import uk.gov.hmrc.customs.file.upload.model.{ApiVersion, UpscanInitiatePayload, UpscanInitiateResponsePayload}
 import uk.gov.hmrc.customs.file.upload.services.FileUploadConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 

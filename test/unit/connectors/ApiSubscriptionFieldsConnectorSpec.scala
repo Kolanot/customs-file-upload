@@ -27,7 +27,7 @@ import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.{ApiSubscriptionFieldsResponse, FileUploadConfig}
 import uk.gov.hmrc.customs.file.upload.services.FileUploadConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, NotFoundException}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 import util.CustomsFileUploadExternalServicesConfig.ApiSubscriptionFieldsContext
 import util.ExternalServicesConfig._
 import util.{ApiSubscriptionFieldsTestData, TestData, UnitSpec}

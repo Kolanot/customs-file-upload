@@ -23,7 +23,7 @@ import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.file.upload.controllers.CustomHeaderNames._
 import uk.gov.hmrc.customs.file.upload.services.{FileUploadConfigService, FileUploadCustomsNotification}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -24,7 +24,7 @@ import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import util.UnitSpec
 
 case class IntegrationTestModule(mockLogger: FileUploadLogger) extends AbstractModule {
-  def configure(): Unit = {
+  override def configure(): Unit = {
     bind(classOf[FileUploadLogger]) toInstance mockLogger
   }
 

@@ -30,7 +30,7 @@ import uk.gov.hmrc.customs.file.upload.model.actionbuilders.ValidatedFileUploadP
 import uk.gov.hmrc.customs.file.upload.model.{SeqOfHeader, UpscanInitiatePayload, UpscanInitiateResponsePayload, VersionOne}
 import uk.gov.hmrc.customs.file.upload.services.FileUploadConfigService
 import uk.gov.hmrc.http.{HeaderCarrier, HttpReads, HttpResponse, NotFoundException}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
 import util.TestData.{EmulatedServiceFailure, ValidatedFileUploadPayloadRequestForNonCspWithTwoFiles, emulatedServiceFailure, fileUploadConfig}
 import util.UnitSpec
 
