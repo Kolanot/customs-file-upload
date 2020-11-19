@@ -25,6 +25,7 @@ import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
 import uk.gov.hmrc.customs.file.upload.connectors.FileTransmissionConnector
+import uk.gov.hmrc.customs.file.upload.http.Non2xxResponseException
 import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.http._
@@ -87,25 +88,25 @@ class FileTransmissionConnectorSpec extends IntegrationTestSpec
     "return a failed future when external service returns 404" in {
       setupFileTransmissionToReturn(NOT_FOUND)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[NotFoundException]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
-      verifyFileUploadLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=404, Error=POST of 'http://localhost:11111/file/transmission' returned 404 (Not Found). Response body: ''")
+      verifyFileUploadLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=404, Error=Received a non 2XX response")
     }
 
     "return a failed future when external service returns 400" in {
       setupFileTransmissionToReturn(BAD_REQUEST)
 
-      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[BadRequestException]
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
-      verifyFileUploadLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=400, Error=POST of 'http://localhost:11111/file/transmission' returned 400 (Bad Request). Response body ''")
+      verifyFileUploadLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=400, Error=Received a non 2XX response")
     }
 
     "return a failed future when external service returns 500" in {
       setupFileTransmissionToReturn(INTERNAL_SERVER_ERROR)
 
-      intercept[Upstream5xxResponse](await(sendValidRequest))
+      intercept[RuntimeException](await(sendValidRequest)).getCause.getClass shouldBe classOf[Non2xxResponseException]
 
-      verifyFileUploadLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission")
+      verifyFileUploadLoggerError("Call to file transmission failed. url=http://localhost:11111/file/transmission, HttpStatus=500, Error=Received a non 2XX response")
     }
 
     "return a failed future when fail to connect the external service" in {

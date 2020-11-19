@@ -23,6 +23,7 @@ import play.api.Application
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test.Helpers.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND}
 import uk.gov.hmrc.customs.file.upload.connectors.CustomsNotificationConnector
+import uk.gov.hmrc.customs.file.upload.http.Non2xxResponseException
 import uk.gov.hmrc.customs.file.upload.services.FileUploadCustomsNotification
 import uk.gov.hmrc.http._
 import util.ApiSubscriptionFieldsTestData.subscriptionFieldsId
@@ -82,19 +83,19 @@ class CustomsNotificationConnectorSpec extends IntegrationTestSpec
     "return a failed future when external service returns 404" in {
       setupCustomsNotificationToReturn(NOT_FOUND)
 
-      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[NotFoundException]
+      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when external service returns 400" in {
       setupCustomsNotificationToReturn(BAD_REQUEST)
 
-      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[BadRequestException]
+      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when external service returns 500" in {
       setupCustomsNotificationToReturn(INTERNAL_SERVER_ERROR)
 
-      intercept[Upstream5xxResponse](awaitSendValidRequest())
+      intercept[RuntimeException](awaitSendValidRequest()).getCause.getClass shouldBe classOf[Non2xxResponseException]
     }
 
     "return a failed future when fail to connect the external service" in {

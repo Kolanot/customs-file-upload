@@ -54,15 +54,10 @@ lazy val microservice = (project in file("."))
   )
   .settings(majorVersion := 0)
 
-def onPackageName(rootPackage: String): String => Boolean = {
-  testName => testName startsWith rootPackage
-}
-
 lazy val unitTestSettings =
   inConfig(Test)(Defaults.testTasks) ++
     Seq(
-      testOptions in Test := Seq(Tests.Filter(onPackageName("unit"))),
-      testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oD"),
+      testOptions in Test := Seq(Tests.Filter(unitTestFilter)),
       unmanagedSourceDirectories in Test := Seq((baseDirectory in Test).value / "test"),
       addTestReportOption(Test, "test-reports")
     )
@@ -89,7 +84,7 @@ lazy val scoverageSettings: Seq[Setting[_]] = Seq(
       ,"uk\\.gov\\.hmrc\\.customs\\.file\\.upload\\.views\\..*"
       ,".*(Reverse|AuthService|BuildInfo|Routes).*"
     ).mkString(";"),
-  coverageMinimum := 96,
+  coverageMinimum := 95,
   coverageFailOnMinimum := true,
   coverageHighlighting := true,
   parallelExecution in Test := false

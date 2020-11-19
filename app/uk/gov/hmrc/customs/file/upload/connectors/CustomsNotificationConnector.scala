@@ -20,10 +20,11 @@ import com.google.inject.{Inject, Singleton}
 import play.mvc.Http.HeaderNames._
 import play.mvc.Http.MimeTypes
 import uk.gov.hmrc.customs.api.common.logging.CdsLogger
-import uk.gov.hmrc.customs.file.upload.controllers.CustomHeaderNames._
+import uk.gov.hmrc.customs.file.upload.controllers.CustomHeaderNames.{XCdsClientIdHeaderName, XConversationIdHeaderName}
+import uk.gov.hmrc.customs.file.upload.http.Non2xxResponseException
 import uk.gov.hmrc.customs.file.upload.services.{FileUploadConfigService, FileUploadCustomsNotification}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException, HttpResponse}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.HttpReads.Implicits._
+import uk.gov.hmrc.http._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -31,7 +32,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class CustomsNotificationConnector @Inject()(http: HttpClient,
                                              logger: CdsLogger,
                                              config: FileUploadConfigService)
-                                            (implicit ec: ExecutionContext) {
+                                            (implicit ec: ExecutionContext) extends HttpErrorFunctions {
 
   private implicit val hc = HeaderCarrier()
   private val XMLHeader = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>"""
@@ -45,15 +46,22 @@ class CustomsNotificationConnector @Inject()(http: HttpClient,
       ACCEPT -> MimeTypes.XML,
       AUTHORIZATION -> s"Basic ${config.fileUploadConfig.customsNotificationBearerToken}")
 
-    (http.POSTString[HttpResponse](
-      config.fileUploadConfig.customsNotificationBaseUrl,
-      XMLHeader + notification.payload.toString(),
-      headers.toSeq
-    ) map { _ =>
-      logger.info(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: notification sent successfully. url=${config.fileUploadConfig.customsNotificationBaseUrl}")
-      ()
-    }).recoverWith {
-      case httpError: HttpException => Future.failed(new RuntimeException(httpError))
+    val url = config.fileUploadConfig.customsNotificationBaseUrl
+
+    http.POSTString[HttpResponse](url, XMLHeader + notification.payload.toString(), headers.toSeq).map { response =>
+      response.status match {
+        case status if is2xx(status) =>
+          logger.info(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: notification sent successfully. url=${config.fileUploadConfig.customsNotificationBaseUrl}")
+          ()
+
+        case status => //1xx, 3xx, 4xx, 5xx
+          throw new Non2xxResponseException(status)
+      }
+    }.recoverWith {
+      case httpError: HttpException =>
+        logger.error(s"Call to customs notification service failed. url=$url, HttpStatus=${httpError.responseCode}, Error=${httpError.message}")
+        Future.failed(new RuntimeException(httpError))
+
       case e: Throwable =>
         logger.error(s"[conversationId=${notification.conversationId}][clientSubscriptionId=${notification.clientSubscriptionId}]: Call to customs notification failed. url=${config.fileUploadConfig.customsNotificationBaseUrl}")
         Future.failed(e)

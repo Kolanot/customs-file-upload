@@ -21,8 +21,8 @@ import uk.gov.hmrc.customs.file.upload.logging.FileUploadLogger
 import uk.gov.hmrc.customs.file.upload.model.actionbuilders.HasConversationId
 import uk.gov.hmrc.customs.file.upload.model.{ApiSubscriptionFieldsResponse, ApiSubscriptionKey}
 import uk.gov.hmrc.customs.file.upload.services.FileUploadConfigService
-import uk.gov.hmrc.http.{HeaderCarrier, HttpException}
-import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpException, UpstreamErrorResponse}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -43,15 +43,16 @@ class ApiSubscriptionFieldsConnector @Inject()(http: HttpClient,
 
     http.GET[ApiSubscriptionFieldsResponse](url)
       .recoverWith {
+        case upstreamError: UpstreamErrorResponse =>
+          logger.error(s"Subscriptions fields lookup call failed. url=$url HttpStatus=${upstreamError.statusCode} error=${upstreamError.getMessage}")
+          Future.failed(upstreamError)
+
         case httpError: HttpException =>
           logger.error(s"Subscriptions fields lookup call failed. url=$url HttpStatus=${httpError.responseCode} error=${httpError.getMessage}")
           Future.failed(new RuntimeException(httpError))
-      }
-      .recoverWith {
+
         case e: Throwable =>
-          val msg = s"Call to subscription information service failed. url=$url"
-          logger.debug(msg, e)
-          logger.error(msg)
+          logger.error(s"Call to subscription information service failed. url=$url")
           Future.failed(e)
       }
   }
