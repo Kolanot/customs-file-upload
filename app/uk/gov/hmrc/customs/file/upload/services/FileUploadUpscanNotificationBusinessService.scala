@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ class FileUploadUpscanNotificationBusinessService @Inject()(repo: FileUploadMeta
             Future.failed(new IllegalStateException(errorMsg))
           case Some(fileTransmission) =>
             connector.send(fileTransmission).map { _ =>
-              logger.info(s"successfully called file transmission service $fileTransmission")
+              logger.info(s"successfully called file transmission service with batchId ${fileTransmission.batch.id.toString}, callbackUrl ${fileTransmission.callbackUrl.toString} and fileReference ${fileTransmission.file.reference.toString}")
               ()
             }
       }
