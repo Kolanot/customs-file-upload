@@ -54,7 +54,7 @@ class UpscanNotificationController @Inject()(cc: ControllerComponents,
                 implicit val conversationId: HasConversationId = conversationIdForLogging(callbackBody.reference.value)
                 callbackBody match {
                   case ready: UploadedReadyCallbackBody =>
-                    cdsLogger.debug(s"Valid JSON request received with READY status. Body: ${Json.prettyPrint(js)} headers: ${request.headers}")
+                    cdsLogger.debug(s"Valid JSON request received with READY status. File reference: ${ready.reference.toString}, status: ${ready.fileStatus.status}, ${ready.uploadDetails} and headers: ${request.headers}")
                     businessService.persistAndCallFileTransmission(clientSubscriptionId, ready).map{_ =>
                         Results.NoContent
                     }.recover{
